@@ -6,10 +6,13 @@
 //
 
 import UIKit
+import CoreData
 
 class MenuViewController: UIViewController {
 
     private var menuView: MenuView {self.view as! MenuView}
+
+    private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 
     override func loadView() {
         self.view = MenuView(frame: UIScreen.main.bounds)
@@ -34,9 +37,8 @@ class MenuViewController: UIViewController {
         // Настройка переходов на  экраны
     //Экран Игры
     @objc func startButtonPress() {
-//        let gameViewController =  //название vc
-//        navigationController?.pushViewController(gameViewController, animated: true)
-        print("Играть")
+        let gameViewController =  GameViewController()
+        navigationController?.pushViewController(gameViewController, animated: true)
     }
 
     //Экран Настроек
@@ -47,12 +49,20 @@ class MenuViewController: UIViewController {
 
     // Экран Статистики
     @objc func statisticsButtonPress() {
-            //        let gameViewController =  //название vc
-            //        navigationController?.pushViewController(gameViewController, animated: true)
-        print("Статистика")
+        let statisticsVC = StatisticsViewController()
+        navigationController?.pushViewController(statisticsVC, animated: true)
     }
 
     @objc func rulesButtonPress() {
-        print("Правила")
-    }
+
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "GamesResult")
+            let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+
+            do {
+                try context.execute(batchDeleteRequest)
+                try context.save()
+            } catch {
+                print("Failed to delete data: \(error)")
+            }
+            }
 }

@@ -19,6 +19,11 @@
 		CE79DA1E2AFE2BE10025ACA7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE79DA1C2AFE2BE10025ACA7 /* LaunchScreen.storyboard */; };
 		CE79DA292AFE2E160025ACA7 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE79DA282AFE2E160025ACA7 /* Constants.swift */; };
 		CE79DA2B2AFE8B050025ACA7 /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE79DA2A2AFE8B050025ACA7 /* MenuView.swift */; };
+		CE79DA372B0355F30025ACA7 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE79DA362B0355F30025ACA7 /* GameViewController.swift */; };
+		CE79DA392B03EB100025ACA7 /* GameModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE79DA382B03EB100025ACA7 /* GameModel.swift */; };
+		CE79DA3C2B03EBC70025ACA7 /* GameStorage.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CE79DA3A2B03EBC70025ACA7 /* GameStorage.xcdatamodeld */; };
+		CE79DA3F2B03FD9E0025ACA7 /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE79DA3E2B03FD9E0025ACA7 /* StatisticsViewController.swift */; };
+		CE79DA412B0403130025ACA7 /* GameResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE79DA402B0403130025ACA7 /* GameResultTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +41,11 @@
 		CE79DA1F2AFE2BE10025ACA7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CE79DA282AFE2E160025ACA7 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		CE79DA2A2AFE8B050025ACA7 /* MenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
+		CE79DA362B0355F30025ACA7 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
+		CE79DA382B03EB100025ACA7 /* GameModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameModel.swift; sourceTree = "<group>"; };
+		CE79DA3B2B03EBC70025ACA7 /* GameStorage.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = GameStorage.xcdatamodel; sourceTree = "<group>"; };
+		CE79DA3E2B03FD9E0025ACA7 /* StatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
+		CE79DA402B0403130025ACA7 /* GameResultTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameResultTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +87,8 @@
 		CE79DA102AFE2BE00025ACA7 /* Rainbow */ = {
 			isa = PBXGroup;
 			children = (
+				CE79DA3D2B03FD710025ACA7 /* StatisticsScreen */,
+				CE79DA352B0355E20025ACA7 /* GameScreen */,
 				CE79DA252AFE2C7E0025ACA7 /* Application */,
 				CE79DA272AFE2D950025ACA7 /* MenuScreen */,
 				A725BBD72B021A1A0078BBFB /* SettingsScreen */,
@@ -104,6 +116,7 @@
 				CE79DA1A2AFE2BE10025ACA7 /* Assets.xcassets */,
 				CE79DA1F2AFE2BE10025ACA7 /* Info.plist */,
 				CE79DA1C2AFE2BE10025ACA7 /* LaunchScreen.storyboard */,
+				CE79DA3A2B03EBC70025ACA7 /* GameStorage.xcdatamodeld */,
 			);
 			path = Supporting;
 			sourceTree = "<group>";
@@ -115,6 +128,24 @@
 				CE79DA2A2AFE8B050025ACA7 /* MenuView.swift */,
 			);
 			path = MenuScreen;
+			sourceTree = "<group>";
+		};
+		CE79DA352B0355E20025ACA7 /* GameScreen */ = {
+			isa = PBXGroup;
+			children = (
+				CE79DA362B0355F30025ACA7 /* GameViewController.swift */,
+				CE79DA382B03EB100025ACA7 /* GameModel.swift */,
+			);
+			path = GameScreen;
+			sourceTree = "<group>";
+		};
+		CE79DA3D2B03FD710025ACA7 /* StatisticsScreen */ = {
+			isa = PBXGroup;
+			children = (
+				CE79DA3E2B03FD9E0025ACA7 /* StatisticsViewController.swift */,
+				CE79DA402B0403130025ACA7 /* GameResultTableViewCell.swift */,
+			);
+			path = StatisticsScreen;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -187,6 +218,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE79DA412B0403130025ACA7 /* GameResultTableViewCell.swift in Sources */,
 				CE79DA2B2AFE8B050025ACA7 /* MenuView.swift in Sources */,
 				CE79DA162AFE2BE00025ACA7 /* MenuViewController.swift in Sources */,
 				A725BBE32B02BD7C0078BBFB /* UISlider+Ext.swift in Sources */,
@@ -196,7 +228,11 @@
 				CE79DA142AFE2BE00025ACA7 /* SceneDelegate.swift in Sources */,
 				A725BBE12B02B9DD0078BBFB /* UIStackView+Ext.swift in Sources */,
 				A725BBDF2B02B6B60078BBFB /* UILabel+Ext.swift in Sources */,
+				CE79DA372B0355F30025ACA7 /* GameViewController.swift in Sources */,
+				CE79DA392B03EB100025ACA7 /* GameModel.swift in Sources */,
+				CE79DA3F2B03FD9E0025ACA7 /* StatisticsViewController.swift in Sources */,
 				CE79DA292AFE2E160025ACA7 /* Constants.swift in Sources */,
+				CE79DA3C2B03EBC70025ACA7 /* GameStorage.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -404,6 +440,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		CE79DA3A2B03EBC70025ACA7 /* GameStorage.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				CE79DA3B2B03EBC70025ACA7 /* GameStorage.xcdatamodel */,
+			);
+			currentVersion = CE79DA3B2B03EBC70025ACA7 /* GameStorage.xcdatamodel */;
+			path = GameStorage.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = CE79DA062AFE2BE00025ACA7 /* Project object */;
 }
