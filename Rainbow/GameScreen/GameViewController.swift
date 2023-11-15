@@ -11,12 +11,11 @@ import CoreData
 final class GameViewController: UIViewController {
 
     private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    var gameScore = 0
-    var allScore = 0
-    private var timer:Timer?
-    private var levelTime = 6
-    private var timerPause = false
+    private var gameModel = GameModel(levelTime: 12)
+    private var timer: Timer?
     private var buttons: [UIButton] = []
+    private var completionWorkItem: DispatchWorkItem?
+
 
     private let x2SpeedButton: UIButton = {
         let button = UIButton()
@@ -28,7 +27,7 @@ final class GameViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemGray6
+        view.backgroundColor = .systemGray
         
         startTime()
         setupButton()
@@ -36,17 +35,25 @@ final class GameViewController: UIViewController {
 
     private func setupButton() {
 
-        let pauseButton = UIBarButtonItem(image: UIImage(systemName: "pause.fill"), style: .plain, target: self, action: #selector(pauseButtonPress))
+        let pauseButton = UIBarButtonItem(image: UIImage(systemName: "pause.fill"),
+                                          style: .plain,
+                                          target: self,
+                                          action: #selector(pauseButtonPress))
         pauseButton.tintColor = .black
         navigationItem.rightBarButtonItem = pauseButton
 
-        let backButton = UIBarButtonItem(image: UIImage(systemName: "arrowshape.backward.fill"), style: .plain, target: self, action: #selector(backButtonPress))
+        let backButton = UIBarButtonItem(image: UIImage(systemName: "arrowshape.backward.fill"),
+                                         style: .plain,
+                                         target: self,
+                                         action: #selector(backButtonPress))
         backButton.tintColor = .black
+
         navigationItem.leftBarButtonItem = backButton
         navigationController?.navigationItem.hidesBackButton = true
 
-        x2SpeedButton.addTarget(self, action: #selector(x2ButtonPress), for: .touchUpInside)
         view.addSubview(x2SpeedButton)
+        x2SpeedButton.addTarget(self, action: #selector(x2ButtonPress), for: .touchUpInside)
+
         NSLayoutConstraint.activate([
             x2SpeedButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50),
             x2SpeedButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
@@ -58,6 +65,7 @@ final class GameViewController: UIViewController {
 
     private func stopGame() {
         timer?.invalidate()
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + 6){
             self.saveGameData()
             self.goStatisticsScreen()
@@ -76,23 +84,30 @@ final class GameViewController: UIViewController {
             firstButton.removeFromSuperview()
         }
 
-        let wordButton = UIButton(frame: CGRect(x: 0, y: 0, width: 150, height: 50))
-        let randomX = CGFloat.random(in: 100...(view.frame.width - wordButton.frame.width))
-
-        wordButton.frame = CGRect(x: randomX, y: 90, width: 150, height: 50)
-        wordButton.layer.cornerRadius = 10
-        wordButton.addTarget(self, action: #selector(tap), for: .touchUpInside)
-        wordButton.setTitle("Слово", for: .normal)
-        wordButton.backgroundColor = .red
+        let wordButton = createWordButton()
 
         let animator = UIViewPropertyAnimator(duration: 6.0, curve: .linear) {
             wordButton.frame.origin.y = self.view.frame.height
         }
         animator.startAnimation()
 
-        allScore += 1
         view.addSubview(wordButton)
         buttons.append(wordButton)
+        gameModel.allScore += 1
+    }
+
+    private func createWordButton() -> UIButton {
+
+        let randomX = CGFloat.random(in: 10...(view.frame.width - 150))
+
+        let wordButton = UIButton(frame: CGRect(x: randomX, y: 90, width: 150, height: 50))
+        wordButton.layer.cornerRadius = 10
+        wordButton.setTitle("Слово", for: .normal)
+        wordButton.titleLabel?.font = UIFont(name: "Helvetica-Bold", size: 16)
+        wordButton.setTitleColor(.white, for: .normal)
+        wordButton.backgroundColor = Constants.backgroundColors.randomElement()
+        wordButton.addTarget(self, action: #selector(correctTap), for: .touchUpInside)
+        return wordButton
     }
 
     private func formattedTime(seconds:Int) -> String {
@@ -107,28 +122,29 @@ final class GameViewController: UIViewController {
 
     private func saveGameData() {
         let gameStat = GamesResult(context: self.context)
-        gameStat.allScore = Int64(allScore)
-        gameStat.gameScore = Int64(gameScore)
-        gameStat.levelTime = 120
+        gameStat.allScore = Int64(gameModel.allScore)
+        gameStat.gameScore = Int64(gameModel.gameScore)
+        gameStat.levelTime = Int64(gameModel.levelTime)
         try? context.save()
     }
+}
 
-
+ // MARK: - Actions
+extension GameViewController {
 
     @objc func pauseButtonPress(){
-        timerPause.toggle()
-        timerPause ? timer?.invalidate() : startTime()
+        gameModel.timerPause.toggle()
+        gameModel.timerPause ? timer?.invalidate() : startTime()
     }
 
     @objc func backButtonPress() {
         navigationController?.popToRootViewController(animated: true)
     }
 
-    @objc func tap(sender: UIButton) {
-        gameScore += 1
-        print(gameScore)
+    @objc func correctTap(sender: UIButton) {
+        gameModel.gameScore += 1
 
-        sender.setTitle("Угадано", for: .normal)
+        sender.setTitle("Верно", for: .normal)
         sender.backgroundColor = .systemGreen
     }
 
@@ -148,9 +164,9 @@ extension GameViewController {
     }
 
     @objc func gameTime() {
-        if levelTime >= 0 {
-            title = formattedTime(seconds: levelTime)
-            levelTime -= 1
+        if gameModel.levelTime >= 0 {
+            title = formattedTime(seconds: gameModel.levelTime)
+            gameModel.levelTime -= 1
 
             displayNextWords()
         }else {

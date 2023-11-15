@@ -8,7 +8,8 @@
 import Foundation
 
 struct GameModel {
-    let levelTime: Int
-    let gameScore: Int
-    let allScore: Int
+    var gameScore :Int = 0
+    var allScore :Int = 0
+    var levelTime :Int
+    var timerPause = false
 }
