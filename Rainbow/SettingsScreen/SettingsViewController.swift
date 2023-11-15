@@ -14,6 +14,23 @@ class SettingsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view = settingsView
+        // NavigationBar
+        title = "Настройки"
         
+        let appearance = UINavigationBarAppearance()
+        appearance.titleTextAttributes = [.font: UIFont.boldSystemFont(ofSize: 24)]
+        navigationController?.navigationBar.standardAppearance = appearance
+        
+        let backButton = UIBarButtonItem(image: UIImage(systemName: "arrowshape.backward.fill"),
+                                         style: .plain,
+                                         target: self,
+                                         action: #selector(backButtonTapped))
+        
+        backButton.tintColor = .black
+        navigationItem.leftBarButtonItem = backButton
+    }
+    
+    @objc func backButtonTapped() {
+        navigationController?.popViewController(animated: true)
     }
 }

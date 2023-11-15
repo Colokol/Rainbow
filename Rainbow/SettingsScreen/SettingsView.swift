@@ -9,9 +9,6 @@ import UIKit
 
 class SettingsView: UIView {
     
-    let settingsLabel = UILabel(text: "Настройки", font: .systemFont(ofSize: 30))
-    let backButton = UIButton(type: .system)
-    
     let gameTimeLabel = UILabel(text: "время игры, мин", font: .systemFont(ofSize: 18))
     let gameTimeSlider = UISlider(maximumValue: 20, value: 10)
     let numberGameTime = UILabel(text: "10", font: .systemFont(ofSize: 18))
@@ -43,9 +40,8 @@ class SettingsView: UIView {
     }
     
     func setViews() {
-        backgroundColor = .lightGray
-        backButton.setImage(UIImage(systemName: "arrowshape.backward.fill"), for: .normal)
-        backButton.tintColor = .black
+        backgroundColor = .systemGray6
+        
         checkTaskLabel.numberOfLines = 0
         changeRateLabel.numberOfLines = 0
         
@@ -68,19 +64,6 @@ class SettingsView: UIView {
     // MARK: - Constraints
     func setConstraints() {
         // Создание стеков для каждой настройки с горизонтальной ориентацией
-        let titleStack = UIStackView(
-            views: [backButton, settingsLabel],
-            axis: .horizontal,
-            distribution: .equalSpacing,
-            spacing: 8,
-            alignment: .leading
-        )
-        
-        let spacer = UIView()
-        
-        spacer.setContentHuggingPriority(.defaultLow, for: .horizontal)
-        titleStack.addArrangedSubview(spacer)
-        
         let gameTimeStack = UIStackView(
             views: [gameTimeLabel, gameTimeSlider, numberGameTime],
             axis: .horizontal,
@@ -139,7 +122,7 @@ class SettingsView: UIView {
         
         // Создание общего вертикального стека для объединения всех настроек
         let settingsStack = UIStackView(
-            views: [titleStack, gameTimeStack, changeRateStack, checkTaskStack, sizeLettersStack, lettersBaseStack, backgroundColorSСStack, positionSCStack],
+            views: [gameTimeStack, changeRateStack, checkTaskStack, sizeLettersStack, lettersBaseStack, backgroundColorSСStack, positionSCStack],
             axis: .vertical,
             distribution: .equalSpacing,
             spacing: 50,
@@ -251,8 +234,6 @@ class SettingsView: UIView {
             settingsStack.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 30),
             settingsStack.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -30)
         ])
-        
-        settingsLabel.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         
         // Установка ширины для слайдеров
         gameTimeSlider.widthAnchor.constraint(equalToConstant: 150).isActive = true

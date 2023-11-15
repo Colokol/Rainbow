@@ -41,8 +41,8 @@ class MenuViewController: UIViewController {
 
     //Экран Настроек
     @objc func settingsButtonPress() {
-            //        let gameViewController =  //название vc
-            //        navigationController?.pushViewController(gameViewController, animated: true)
+            let gameViewController = SettingsViewController() //название vc
+            navigationController?.pushViewController(gameViewController, animated: true)
         print("Настройки")
     }
 
