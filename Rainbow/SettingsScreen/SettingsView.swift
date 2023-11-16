@@ -9,29 +9,50 @@ import UIKit
 
 class SettingsView: UIView {
     
-    let gameTimeLabel = UILabel(text: "время игры, мин", font: .systemFont(ofSize: 18))
+    let gameTimeLabel = UILabel(text: "время игры, мин")
     let gameTimeSlider = UISlider(maximumValue: 20, value: 10)
-    let numberGameTime = UILabel(text: "10", font: .systemFont(ofSize: 18))
+    let numberGameTime = UILabel(text: "10")
     
-    let changeRateLabel = UILabel(text: "скорость смены заданий, сек", font: .systemFont(ofSize: 18))
+    let changeRateLabel = UILabel(text: "скорость смены заданий, сек")
     let changeRateSlider = UISlider(maximumValue: 4, value: 2)
-    let numberChangeRate = UILabel(text: "2", font: .systemFont(ofSize: 18))
+    let numberChangeRate = UILabel(text: "2")
     
-    let checkTaskLabel = UILabel(text: "игра с проверкой заданий", font: .systemFont(ofSize: 18))
+    let checkTaskLabel = UILabel(text: "игра с проверкой заданий")
     let checkTaskSwitch = UISwitch()
     
-    let sizeLettersLabel = UILabel(text: "размер букв", font: .systemFont(ofSize: 18))
-    let sizeStepper = UIStepper()
-    let lettersLabel = UILabel(text: "Аа", font: .systemFont(ofSize: 18))
+    let sizeLettersLabel = UILabel(text: "размер букв")
     
-    let letterBaseLabel = UILabel(text: "подложка для букв", font: .systemFont(ofSize: 18))
+    let sizeStepper: UIStepper = {
+        let sizeStepper = UIStepper()
+        sizeStepper.minimumValue = 10
+        sizeStepper.maximumValue = 36
+        sizeStepper.stepValue = 1
+        return sizeStepper
+    }()
+    
+    let lettersLabel = UILabel(text: "Аа")
+    
+    let letterBaseLabel = UILabel(text: "подложка для букв")
     let letterBaseSwitch = UISwitch()
     
-    var backgroundColorLabel = UILabel(text: "цвет фона", font: .systemFont(ofSize: 18))
-    let backgroundColorSC = UISegmentedControl()
+    var backgroundColorLabel = UILabel(text: "цвет фона")
+    let backgroundColorSC: UISegmentedControl = {
+        let backgroundColorSC = UISegmentedControl()
+        backgroundColorSC.insertSegment(withTitle: "Белый", at: 0, animated: false)
+        backgroundColorSC.insertSegment(withTitle: "Серый", at: 1, animated: false)
+        backgroundColorSC.insertSegment(withTitle: "Черный", at: 2, animated: false)
+        backgroundColorSC.selectedSegmentIndex = 0
+        return backgroundColorSC
+    }()
     
-    var positionLabel = UILabel(text: "расположение слова на экране", font: .systemFont(ofSize: 18))
-    let positionSC = UISegmentedControl()
+    var positionLabel = UILabel(text: "расположение слова на экране")
+    let positionSC: UISegmentedControl = {
+        let positionSC = UISegmentedControl()
+        positionSC.insertSegment(withTitle: "Случайное", at: 0, animated: false)
+        positionSC.insertSegment(withTitle: "По центру", at: 1, animated: false)
+        positionSC.selectedSegmentIndex = 0
+        return positionSC
+    }()
     
     init() {
         super.init(frame: CGRect())
@@ -42,22 +63,7 @@ class SettingsView: UIView {
     func setViews() {
         backgroundColor = .systemGray6
         
-        checkTaskLabel.numberOfLines = 0
-        changeRateLabel.numberOfLines = 0
-        
-        sizeStepper.minimumValue = 10
-        sizeStepper.maximumValue = 36
-        sizeStepper.stepValue = 1
-        
-        backgroundColorSC.insertSegment(withTitle: "Белый", at: 0, animated: false)
-        backgroundColorSC.insertSegment(withTitle: "Серый", at: 1, animated: false)
-        backgroundColorSC.insertSegment(withTitle: "Черный", at: 1, animated: false)
-        backgroundColorSC.selectedSegmentIndex = 0
         backgroundColorLabel.textAlignment = .left
-        
-        positionSC.insertSegment(withTitle: "Случайное", at: 0, animated: false)
-        positionSC.insertSegment(withTitle: "По центру", at: 1, animated: false)
-        positionSC.selectedSegmentIndex = 0
         positionLabel.textAlignment = .left
     }
     
@@ -65,168 +71,51 @@ class SettingsView: UIView {
     func setConstraints() {
         // Создание стеков для каждой настройки с горизонтальной ориентацией
         let gameTimeStack = UIStackView(
-            views: [gameTimeLabel, gameTimeSlider, numberGameTime],
-            axis: .horizontal,
-            distribution: .equalSpacing,
-            spacing: 8,
-            alignment: .center
+            views: [gameTimeLabel, gameTimeSlider, numberGameTime]
         )
         
         let changeRateStack = UIStackView(
-            views: [changeRateLabel, changeRateSlider, numberChangeRate],
-            axis: .horizontal,
-            distribution: .equalSpacing,
-            spacing: 8,
-            alignment: .center
+            views: [changeRateLabel, changeRateSlider, numberChangeRate]
         )
         
         let checkTaskStack = UIStackView(
-            views: [checkTaskLabel, checkTaskSwitch],
-            axis: .horizontal,
-            distribution: .equalSpacing,
-            spacing: 8,
-            alignment: .center
+            views: [checkTaskLabel, checkTaskSwitch]
         )
         
         let sizeLettersStack = UIStackView(
-            views: [sizeLettersLabel, sizeStepper, lettersLabel],
-            axis: .horizontal,
-            distribution: .equalSpacing,
-            spacing: 8,
-            alignment: .center
+            views: [sizeLettersLabel, sizeStepper, lettersLabel]
         )
         
         let lettersBaseStack = UIStackView(
-            views: [letterBaseLabel, letterBaseSwitch],
-            axis: .horizontal,
-            distribution: .equalSpacing,
-            spacing: 8,
-            alignment: .center
+            views: [letterBaseLabel, letterBaseSwitch]
         )
         
-        let backgroundColorSСStack = UIStackView(
-            views: [backgroundColorLabel ,backgroundColorSC],
-            axis: .vertical,
-            distribution: .equalSpacing,
-            spacing: 10,
-            alignment: .fill
-        )
-        
-        let positionSCStack = UIStackView(
-            views: [positionLabel, positionSC],
-            axis: .vertical,
-            distribution: .equalSpacing,
-            spacing: 10,
-            alignment: .fill
-        )
+        let backgroundColorSСStack: UIStackView = {
+            let backgroundColorSСStack = UIStackView(views: [backgroundColorLabel ,backgroundColorSC])
+            backgroundColorSСStack.axis = .vertical
+            backgroundColorSСStack.alignment = .fill
+            return backgroundColorSСStack
+        }()
+
+        let positionSCStack: UIStackView = {
+            let positionSCStack = UIStackView(views: [positionLabel, positionSC])
+            positionSCStack.axis = .vertical
+            positionSCStack.alignment = .fill
+            return positionSCStack
+        }()
         
         // Создание общего вертикального стека для объединения всех настроек
-        let settingsStack = UIStackView(
-            views: [gameTimeStack, changeRateStack, checkTaskStack, sizeLettersStack, lettersBaseStack, backgroundColorSСStack, positionSCStack],
-            axis: .vertical,
-            distribution: .equalSpacing,
-            spacing: 50,
-            alignment: .fill
-        )
+        let settingsStack: UIStackView = {
+            let settingsStack = UIStackView(
+                views: [gameTimeStack, changeRateStack, checkTaskStack, sizeLettersStack, lettersBaseStack, backgroundColorSСStack, positionSCStack])
+            settingsStack.axis = .vertical
+            settingsStack.alignment = .fill
+            settingsStack.backgroundColor = .clear
+            return settingsStack
+        }()
         
-        // Создание подложки
-        let backgroundViewForGameTimeStack = UIView()
-        backgroundViewForGameTimeStack.backgroundColor = .white
-        backgroundViewForGameTimeStack.layer.cornerRadius = 15
-        
-        let backgroundViewForChangeRateStack = UIView()
-        backgroundViewForChangeRateStack.backgroundColor = .white
-        backgroundViewForChangeRateStack.layer.cornerRadius = 15
-        
-        let backgroundViewForcheckTaskStack = UIView()
-        backgroundViewForcheckTaskStack.backgroundColor = .white
-        backgroundViewForcheckTaskStack.layer.cornerRadius = 15
-        
-        let backgroundViewForSizeLettersStack = UIView()
-        backgroundViewForSizeLettersStack.backgroundColor = .white
-        backgroundViewForSizeLettersStack.layer.cornerRadius = 15
-        
-        let backgroundViewForletterBaseStack = UIView()
-        backgroundViewForletterBaseStack.backgroundColor = .white
-        backgroundViewForletterBaseStack.layer.cornerRadius = 15
-        
-        let backgroundViewForColorSСStackS = UIView()
-        backgroundViewForColorSСStackS.backgroundColor = .white
-        backgroundViewForColorSСStackS.layer.cornerRadius = 15
-        
-        let backgroundViewForPositionSCStack = UIView()
-        backgroundViewForPositionSCStack.backgroundColor = .white
-        backgroundViewForPositionSCStack.layer.cornerRadius = 15
-
-        addSubview(backgroundViewForGameTimeStack)
-        addSubview(backgroundViewForChangeRateStack)
-        addSubview(backgroundViewForcheckTaskStack)
-        addSubview(backgroundViewForSizeLettersStack)
-        addSubview(backgroundViewForletterBaseStack)
-        addSubview(backgroundViewForColorSСStackS)
-        addSubview(backgroundViewForPositionSCStack)
         addSubview(settingsStack)
-        
-        backgroundViewForChangeRateStack.translatesAutoresizingMaskIntoConstraints = false
-        backgroundViewForGameTimeStack.translatesAutoresizingMaskIntoConstraints = false
-        backgroundViewForcheckTaskStack.translatesAutoresizingMaskIntoConstraints = false
-        backgroundViewForSizeLettersStack.translatesAutoresizingMaskIntoConstraints = false
-        backgroundViewForletterBaseStack.translatesAutoresizingMaskIntoConstraints = false
-        backgroundColorSC.translatesAutoresizingMaskIntoConstraints = false
-        backgroundViewForColorSСStackS.translatesAutoresizingMaskIntoConstraints = false
-        backgroundViewForPositionSCStack.translatesAutoresizingMaskIntoConstraints = false
         settingsStack.translatesAutoresizingMaskIntoConstraints = false
-        
-        // Установка constraints для подложки
-        NSLayoutConstraint.activate([
-            backgroundViewForGameTimeStack.topAnchor.constraint(equalTo: gameTimeStack.topAnchor, constant: -20),
-            backgroundViewForGameTimeStack.leadingAnchor.constraint(equalTo: gameTimeStack.leadingAnchor, constant: -20),
-            backgroundViewForGameTimeStack.trailingAnchor.constraint(equalTo: gameTimeStack.trailingAnchor, constant: 20),
-            backgroundViewForGameTimeStack.bottomAnchor.constraint(equalTo: gameTimeStack.bottomAnchor, constant: 20)
-        ])
-        
-        NSLayoutConstraint.activate([
-            backgroundViewForChangeRateStack.topAnchor.constraint(equalTo: changeRateStack.topAnchor, constant: -20),
-            backgroundViewForChangeRateStack.leadingAnchor.constraint(equalTo: changeRateStack.leadingAnchor, constant: -20),
-            backgroundViewForChangeRateStack.trailingAnchor.constraint(equalTo: changeRateStack.trailingAnchor, constant: 20),
-            backgroundViewForChangeRateStack.bottomAnchor.constraint(equalTo: changeRateStack.bottomAnchor, constant: 20)
-        ])
-        
-        NSLayoutConstraint.activate([
-            backgroundViewForcheckTaskStack.topAnchor.constraint(equalTo: checkTaskStack.topAnchor, constant: -20),
-            backgroundViewForcheckTaskStack.leadingAnchor.constraint(equalTo: checkTaskStack.leadingAnchor, constant: -20),
-            backgroundViewForcheckTaskStack.trailingAnchor.constraint(equalTo: checkTaskStack.trailingAnchor, constant: 20),
-            backgroundViewForcheckTaskStack.bottomAnchor.constraint(equalTo: checkTaskStack.bottomAnchor, constant: 20)
-        ])
-        
-        NSLayoutConstraint.activate([
-            backgroundViewForSizeLettersStack.topAnchor.constraint(equalTo: sizeLettersStack.topAnchor, constant: -20),
-            backgroundViewForSizeLettersStack.leadingAnchor.constraint(equalTo: sizeLettersStack.leadingAnchor, constant: -20),
-            backgroundViewForSizeLettersStack.trailingAnchor.constraint(equalTo: sizeLettersStack.trailingAnchor, constant: 20),
-            backgroundViewForSizeLettersStack.bottomAnchor.constraint(equalTo: sizeLettersStack.bottomAnchor, constant: 20)
-        ])
-        
-        
-        NSLayoutConstraint.activate([
-            backgroundViewForletterBaseStack.topAnchor.constraint(equalTo: lettersBaseStack.topAnchor, constant: -20),
-            backgroundViewForletterBaseStack.leadingAnchor.constraint(equalTo: lettersBaseStack.leadingAnchor, constant: -20),
-            backgroundViewForletterBaseStack.trailingAnchor.constraint(equalTo: lettersBaseStack.trailingAnchor, constant: 20),
-            backgroundViewForletterBaseStack.bottomAnchor.constraint(equalTo: lettersBaseStack.bottomAnchor, constant: 20)
-        ])
-        
-        NSLayoutConstraint.activate([
-            backgroundViewForColorSСStackS.topAnchor.constraint(equalTo: backgroundColorSСStack.topAnchor, constant: -20),
-            backgroundViewForColorSСStackS.leadingAnchor.constraint(equalTo: backgroundColorSСStack.leadingAnchor, constant: -20),
-            backgroundViewForColorSСStackS.trailingAnchor.constraint(equalTo: backgroundColorSСStack.trailingAnchor, constant: 20),
-            backgroundViewForColorSСStackS.bottomAnchor.constraint(equalTo: backgroundColorSСStack.bottomAnchor, constant: 20)
-        ])
-        
-        NSLayoutConstraint.activate([
-            backgroundViewForPositionSCStack.topAnchor.constraint(equalTo: positionSCStack.topAnchor, constant: -20),
-            backgroundViewForPositionSCStack.leadingAnchor.constraint(equalTo: positionSCStack.leadingAnchor, constant: -20),
-            backgroundViewForPositionSCStack.trailingAnchor.constraint(equalTo: positionSCStack.trailingAnchor, constant: 20),
-            backgroundViewForPositionSCStack.bottomAnchor.constraint(equalTo: positionSCStack.bottomAnchor, constant: 20)
-        ])
         
         // Установка constraints для settingsStack
         NSLayoutConstraint.activate([
@@ -236,8 +125,8 @@ class SettingsView: UIView {
         ])
         
         // Установка ширины для слайдеров
-        gameTimeSlider.widthAnchor.constraint(equalToConstant: 150).isActive = true
-        changeRateSlider.widthAnchor.constraint(equalToConstant: 150).isActive = true
+        gameTimeSlider.widthAnchor.constraint(equalToConstant: 120).isActive = true
+        changeRateSlider.widthAnchor.constraint(equalToConstant: 120).isActive = true
         
     }
     

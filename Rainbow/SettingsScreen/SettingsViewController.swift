@@ -14,7 +14,10 @@ class SettingsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view = settingsView
-        // NavigationBar
+        showNavigationBar()
+    }
+    
+    func showNavigationBar() {
         title = "Настройки"
         
         let appearance = UINavigationBarAppearance()
