@@ -20,6 +20,17 @@ class SettingsView: UIView {
     let checkTaskLabel = UILabel(text: "игра с проверкой заданий")
     let checkTaskSwitch = UISwitch()
     
+    let lettersColor = UILabel(text: "цвета букв")
+    let colors: [UIColor] = [.green, .purple, .orange, .blue, .black, .brown]
+    var colorButtons: [UIButton] = []
+    var selectedColors: Set<UIColor> = []
+    var lettersColorStack: UIStackView = {
+           let stack = UIStackView()
+           stack.axis = .vertical
+           stack.spacing = 10
+           return stack
+       }()
+
     let sizeLettersLabel = UILabel(text: "размер букв")
     
     let sizeStepper: UIStepper = {
@@ -67,8 +78,29 @@ class SettingsView: UIView {
         positionLabel.textAlignment = .left
     }
     
+    private func setupColorButtons() -> UIStackView {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.distribution = .fillEqually
+        stackView.spacing = 8
+
+        for color in colors {
+            let button = UIButton()
+            button.backgroundColor = color
+            button.layer.cornerRadius = 15
+            button.clipsToBounds = true
+            button.setImage(UIImage(systemName: "checkmark")?.withTintColor(.white, renderingMode: .alwaysOriginal), for: .selected)
+            button.addTarget(self, action: #selector(colorButtonTapped), for: .touchUpInside)
+            colorButtons.append(button)
+            stackView.addArrangedSubview(button)
+        }
+        
+        return stackView
+    }
+    
     // MARK: - Constraints
     func setConstraints() {
+        
         // Создание стеков для каждой настройки с горизонтальной ориентацией
         let gameTimeStack = UIStackView(
             views: [gameTimeLabel, gameTimeSlider, numberGameTime]
@@ -80,6 +112,10 @@ class SettingsView: UIView {
         
         let checkTaskStack = UIStackView(
             views: [checkTaskLabel, checkTaskSwitch]
+        )
+        
+        let lettersColorStack = UIStackView(
+            views: [lettersColor, lettersColorStack]
         )
         
         let sizeLettersStack = UIStackView(
@@ -104,10 +140,14 @@ class SettingsView: UIView {
             return positionSCStack
         }()
         
+        let colorButtonStack = setupColorButtons()
+        lettersColorStack.addArrangedSubview(colorButtonStack)
+        addSubview(lettersColorStack)
+        
         // Создание общего вертикального стека для объединения всех настроек
         let settingsStack: UIStackView = {
             let settingsStack = UIStackView(
-                views: [gameTimeStack, changeRateStack, checkTaskStack, sizeLettersStack, lettersBaseStack, backgroundColorSСStack, positionSCStack])
+                views: [gameTimeStack, changeRateStack, checkTaskStack, lettersColorStack, sizeLettersStack, lettersBaseStack, backgroundColorSСStack, positionSCStack])
             settingsStack.axis = .vertical
             settingsStack.alignment = .fill
             settingsStack.backgroundColor = .clear
@@ -132,6 +172,18 @@ class SettingsView: UIView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    @objc private func colorButtonTapped(_ sender: UIButton) {
+        sender.isSelected.toggle()
+        if let color = sender.backgroundColor {
+            if sender.isSelected {
+                selectedColors.insert(color)
+            } else {
+                selectedColors.remove(color)
+            }
+        }
+        // Дополнительная логика при выборе цвета
     }
 }
 
