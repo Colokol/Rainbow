@@ -11,7 +11,7 @@ extension UILabel {
     convenience init(text: String) {
         self.init()
         self.text = text
-        self.font = .systemFont(ofSize: 18)
+        self.font = .systemFont(ofSize: 15)
         self.textAlignment = .center
         self.textColor = .black
         self.numberOfLines = 0
