@@ -23,17 +23,30 @@ class StatisticsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        
+        let backButton = UIBarButtonItem(image: UIImage(systemName: "arrowshape.backward.fill"),
+                                         style: .plain,
+                                         target: self,
+                                         action: #selector(backButtonPress))
+        backButton.tintColor = .black
 
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.register(GameResultTableViewCell.self, forCellReuseIdentifier: "Cell")
+        navigationItem.leftBarButtonItem = backButton
+        navigationController?.navigationItem.hidesBackButton = true
+
+        configureTableView()
         loadData()
-        view.addSubview(tableView)
     }
 
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         tableView.frame = view.bounds
+    }
+
+    private func configureTableView() {
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register(GameResultTableViewCell.self, forCellReuseIdentifier: "Cell")
+        view.addSubview(tableView)
     }
 
     private func loadData(){
@@ -49,10 +62,15 @@ class StatisticsViewController: UIViewController {
             }catch {
                 print("Error")
             }
+    }
 
+    @objc func backButtonPress() {
+        navigationController?.popToRootViewController(animated: true)
     }
 
 }
+
+// MARK: - TableView Method
 
 extension StatisticsViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

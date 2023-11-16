@@ -9,41 +9,42 @@ import Foundation
 import UIKit
 
 enum Constants {
+
     static let logoImage = "logo"
     static let nameGame =   """
                             НЛП игра
                             Радуга
                             """
-    static let backgroundColors: [UIColor] = [
-        UIColor(red: 255/255, green: 221/255, blue: 187/255, alpha: 1),  // Персиковый
-        UIColor(red: 222/255, green: 249/255, blue: 214/255, alpha: 1),  // Салатовый
-        UIColor(red: 191/255, green: 222/255, blue: 255/255, alpha: 1),  // Голубой
-        UIColor(red: 255/255, green: 207/255, blue: 185/255, alpha: 1),  // Розовый
-        UIColor(red: 232/255, green: 225/255, blue: 255/255, alpha: 1),  // Фиолетовый
-        UIColor(red: 255/255, green: 249/255, blue: 196/255, alpha: 1),  // Жёлтый
-        UIColor(red: 255/255, green: 230/255, blue: 255/255, alpha: 1),  // Сиреневый
-            UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 1),         // Черный
-            UIColor(red: 240/255, green: 240/255, blue: 240/255, alpha: 1),   // Светло-серый
-            UIColor(red: 60/255, green: 60/255, blue: 60/255, alpha: 1),      // Темно-серый
-            UIColor(red: 255/255, green: 0/255, blue: 0/255, alpha: 1),       // Красный
-            UIColor(red: 0/255, green: 255/255, blue: 0/255, alpha: 1),       // Зеленый
-            UIColor(red: 0/255, green: 0/255, blue: 255/255, alpha: 1),       // Синий
-            UIColor(red: 255/255, green: 255/255, blue: 0/255, alpha: 1),     // Желтый
-            UIColor(red: 255/255, green: 165/255, blue: 0/255, alpha: 1),     // Оранжевый
-            UIColor(red: 128/255, green: 0/255, blue: 128/255, alpha: 1)      // Пурпурный
 
+    static let colorNames = [
+        "Синий",
+        "Темно-зелёный",
+        "Фиолетовый",
+        "Зелёный",
+        "Серый",
+        "Красный",
+        "Фуксия",
+        "Оранжевый",
+        "Красный",
+        "Розовый",
+        "Жёлтый",
+        "Чёрный"
     ]
 
-    static let textColors: [UIColor] = [
-        UIColor(red: 255/255, green: 0/255, blue: 0/255, alpha: 1),       // Красный
-        UIColor(red: 0/255, green: 255/255, blue: 0/255, alpha: 1),       // Зеленый
-        UIColor(red: 0/255, green: 0/255, blue: 255/255, alpha: 1),       // Синий
-        UIColor(red: 255/255, green: 255/255, blue: 0/255, alpha: 1),     // Желтый
-        UIColor(red: 255/255, green: 165/255, blue: 0/255, alpha: 1),     // Оранжевый
-        UIColor(red: 128/255, green: 0/255, blue: 128/255, alpha: 1),      // Пурпурный
-        UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1),   // Белый
-        UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 1),         // Черный
-        UIColor(red: 240/255, green: 240/255, blue: 240/255, alpha: 1),   // Светло-серый
-        UIColor(red: 60/255, green: 60/255, blue: 60/255, alpha: 1)      // Темно-серый
+    static let color = [
+        UIColor(red: 5/255, green: 195/255, blue: 255/255, alpha: 1.0),
+        UIColor(red: 37/255, green: 59/255, blue: 2/255, alpha: 1.0),
+        UIColor(red: 70/255, green: 5/255, blue: 255/255, alpha: 1.0),
+        UIColor(red: 70/255, green: 255/255, blue: 5/255, alpha: 1.0),
+        UIColor(red: 94/255, green: 84/255, blue: 91/255, alpha: 1.0),
+        UIColor(red: 96/255, green: 11/255, blue: 11/255, alpha: 1.0),
+        UIColor(red: 205/255, green: 5/255, blue: 255/255, alpha: 1.0),
+        UIColor(red: 240/255, green: 119/255, blue: 7/255, alpha: 1.0),
+        UIColor(red: 255/255, green: 5/255, blue: 5/255, alpha: 1.0),
+        UIColor(red: 255/255, green: 13/255, blue: 173/255, alpha: 1.0),
+        UIColor(red: 255/255, green: 215/255, blue: 5/255, alpha: 1.0),
+        UIColor(red: 0, green: 0, blue: 0, alpha: 1.0)
     ]
+
+
 }
