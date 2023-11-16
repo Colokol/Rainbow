@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A725BBDB2B021AA40078BBFB /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A725BBDA2B021AA40078BBFB /* SettingsView.swift */; };
+		A725BBDD2B0221BD0078BBFB /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A725BBDC2B0221BD0078BBFB /* SettingsViewController.swift */; };
+		A725BBDF2B02B6B60078BBFB /* UILabel+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A725BBDE2B02B6B60078BBFB /* UILabel+Ext.swift */; };
+		A725BBE12B02B9DD0078BBFB /* UIStackView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A725BBE02B02B9DD0078BBFB /* UIStackView+Ext.swift */; };
+		A725BBE32B02BD7C0078BBFB /* UISlider+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A725BBE22B02BD7C0078BBFB /* UISlider+Ext.swift */; };
 		CE79DA122AFE2BE00025ACA7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE79DA112AFE2BE00025ACA7 /* AppDelegate.swift */; };
 		CE79DA142AFE2BE00025ACA7 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE79DA132AFE2BE00025ACA7 /* SceneDelegate.swift */; };
 		CE79DA162AFE2BE00025ACA7 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE79DA152AFE2BE00025ACA7 /* MenuViewController.swift */; };
@@ -17,6 +22,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A725BBDA2B021AA40078BBFB /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		A725BBDC2B0221BD0078BBFB /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		A725BBDE2B02B6B60078BBFB /* UILabel+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Ext.swift"; sourceTree = "<group>"; };
+		A725BBE02B02B9DD0078BBFB /* UIStackView+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+Ext.swift"; sourceTree = "<group>"; };
+		A725BBE22B02BD7C0078BBFB /* UISlider+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UISlider+Ext.swift"; sourceTree = "<group>"; };
 		CE79DA0E2AFE2BE00025ACA7 /* Rainbow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Rainbow.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE79DA112AFE2BE00025ACA7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CE79DA132AFE2BE00025ACA7 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -39,6 +49,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A725BBD72B021A1A0078BBFB /* SettingsScreen */ = {
+			isa = PBXGroup;
+			children = (
+				A725BBDC2B0221BD0078BBFB /* SettingsViewController.swift */,
+				A725BBDA2B021AA40078BBFB /* SettingsView.swift */,
+			);
+			path = SettingsScreen;
+			sourceTree = "<group>";
+		};
 		CE79DA052AFE2BE00025ACA7 = {
 			isa = PBXGroup;
 			children = (
@@ -60,6 +79,7 @@
 			children = (
 				CE79DA252AFE2C7E0025ACA7 /* Application */,
 				CE79DA272AFE2D950025ACA7 /* MenuScreen */,
+				A725BBD72B021A1A0078BBFB /* SettingsScreen */,
 				CE79DA262AFE2C8F0025ACA7 /* Supporting */,
 			);
 			path = Rainbow;
@@ -78,6 +98,9 @@
 			isa = PBXGroup;
 			children = (
 				CE79DA282AFE2E160025ACA7 /* Constants.swift */,
+				A725BBDE2B02B6B60078BBFB /* UILabel+Ext.swift */,
+				A725BBE22B02BD7C0078BBFB /* UISlider+Ext.swift */,
+				A725BBE02B02B9DD0078BBFB /* UIStackView+Ext.swift */,
 				CE79DA1A2AFE2BE10025ACA7 /* Assets.xcassets */,
 				CE79DA1F2AFE2BE10025ACA7 /* Info.plist */,
 				CE79DA1C2AFE2BE10025ACA7 /* LaunchScreen.storyboard */,
@@ -166,8 +189,13 @@
 			files = (
 				CE79DA2B2AFE8B050025ACA7 /* MenuView.swift in Sources */,
 				CE79DA162AFE2BE00025ACA7 /* MenuViewController.swift in Sources */,
+				A725BBE32B02BD7C0078BBFB /* UISlider+Ext.swift in Sources */,
+				A725BBDD2B0221BD0078BBFB /* SettingsViewController.swift in Sources */,
 				CE79DA122AFE2BE00025ACA7 /* AppDelegate.swift in Sources */,
+				A725BBDB2B021AA40078BBFB /* SettingsView.swift in Sources */,
 				CE79DA142AFE2BE00025ACA7 /* SceneDelegate.swift in Sources */,
+				A725BBE12B02B9DD0078BBFB /* UIStackView+Ext.swift in Sources */,
+				A725BBDF2B02B6B60078BBFB /* UILabel+Ext.swift in Sources */,
 				CE79DA292AFE2E160025ACA7 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
