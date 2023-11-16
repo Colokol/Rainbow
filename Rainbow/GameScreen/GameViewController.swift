@@ -9,10 +9,8 @@ import UIKit
 import CoreData
 
 final class GameViewController: UIViewController {
-
-    let configaa: (Int,Int,Bool) = (120,2,true)
-
-    private let settingsModel: GameConfig
+    private let time = 0
+    private var settingsModel: AppSettings
     private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     private var gameModel = GameModel(levelTime: 12)
     private var gameSpeedTimer: Timer?
@@ -29,22 +27,29 @@ final class GameViewController: UIViewController {
         return button
     }()
 
-    init() {
-        self.settingsModel = GameConfig(config: configaa)
+
+    init(settings:AppSettings) {
+        self.settingsModel = settings
         super.init(nibName: nil, bundle: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemGray
-
+        title = formattedTime(seconds: Int(settingsModel.timeGame))  
+        displayNextWords()
         startGameTime()
         setupButton()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        levelTimeTimer?.invalidate()
+        gameSpeedTimer?.invalidate()
     }
 
     private func setupButton() {
@@ -139,7 +144,7 @@ final class GameViewController: UIViewController {
         let gameStat = GamesResult(context: self.context)
         gameStat.allScore = Int64(gameModel.allScore)
         gameStat.gameScore = Int64(gameModel.gameScore)
-        gameStat.levelTime = Int64(settingsModel.levelTime)
+        gameStat.levelTime = Int64(settingsModel.timeGame)
         try? context.save()
     }
 }
@@ -183,9 +188,9 @@ extension GameViewController {
 
         levelTimeTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
             guard let self else {return}
-            if self.gameModel.levelTime >= 0 {
-                self.title = formattedTime(seconds: gameModel.levelTime)
-                self.gameModel.levelTime -= 1
+            if self.settingsModel.timeGame >= 0 {
+                self.title = formattedTime(seconds: Int(settingsModel.timeGame))
+                self.settingsModel.timeGame -= 1
             }else {
                 self.title = "Время вышло"
                 self.stopGame()

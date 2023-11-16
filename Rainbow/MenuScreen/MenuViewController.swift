@@ -11,6 +11,7 @@ import CoreData
 class MenuViewController: UIViewController {
 
     private var menuView: MenuView {self.view as! MenuView}
+    var settings: AppSettings?
 
     private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 
@@ -22,6 +23,22 @@ class MenuViewController: UIViewController {
         super.viewDidLoad()
 
         setActions()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        loadSettings()
+    }
+
+    private func loadSettings(){
+        let request: NSFetchRequest<AppSettings> = AppSettings.fetchRequest()
+        do{
+            let data = try self.context.fetch(request)
+            DispatchQueue.main.async {
+                self.settings = data[0]
+            }
+        }catch {
+            print("Error")
+        }
     }
 
     // MARK: - Actions
@@ -37,7 +54,7 @@ class MenuViewController: UIViewController {
         // Настройка переходов на  экраны
     //Экран Игры
     @objc func startButtonPress() {
-        let gameViewController =  GameViewController()
+        let gameViewController =  GameViewController(settings: settings!)
         navigationController?.pushViewController(gameViewController, animated: true)
     }
 

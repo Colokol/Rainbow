@@ -14,7 +14,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        let firstLaunch = UserDefaults.standard.bool(forKey: "FirstLaunch")
+
+        if !firstLaunch {
+            UserDefaults.standard.set(true, forKey: "FirstLaunch")
+
+            let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+
+            let settings = AppSettings(context: context)
+            settings.backgroundActive = false
+            settings.backgroundColor = "systemGray6"
+            settings.checkAnswear = false
+            settings.letterSize = 15
+            settings.timeGame = 120
+            settings.wordChangeSpeed = 1
+            try? context.save()
+        }
         return true
     }
 

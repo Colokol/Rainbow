@@ -8,6 +8,7 @@
 import UIKit
 
 class SettingsView: UIView {
+    var appSettings: AppSettings?
     
     var onGameTimeChanged: ((Float) -> Void)?
     var onChangeRateChanged: ((Float) -> Void)?
@@ -81,7 +82,14 @@ class SettingsView: UIView {
         positionSC.selectedSegmentIndex = 0
         return positionSC
     }()
-    
+
+    required init(settings:AppSettings) {
+        super.init(frame: CGRect())
+        self.appSettings = settings
+        setViews()
+        setConstraints()
+    }
+
     init() {
         super.init(frame: CGRect())
         setViews()
@@ -248,21 +256,21 @@ class SettingsView: UIView {
     }
 }
 
-import SwiftUI
-
-struct SettingsViewProvider: PreviewProvider {
-    static var previews: some View {
-        ContainerView().edgesIgnoringSafeArea(.all)
-    }
-    
-    struct ContainerView: UIViewRepresentable {
-        let view = SettingsView()
-        
-        func makeUIView(context: UIViewRepresentableContext<SettingsViewProvider.ContainerView>) -> some UIView {
-            return view
-        }
-        
-        func updateUIView(_ uiView: UIViewType, context: Context) { }
-    }
-    
-}
+//import SwiftUI
+//
+//struct SettingsViewProvider: PreviewProvider {
+//    static var previews: some View {
+//        ContainerView().edgesIgnoringSafeArea(.all)
+//    }
+//
+//    struct ContainerView: UIViewRepresentable {
+//        let view = SettingsView()
+//
+//        func makeUIView(context: UIViewRepresentableContext<SettingsViewProvider.ContainerView>) -> some UIView {
+//            return view
+//        }
+//
+//        func updateUIView(_ uiView: UIViewType, context: Context) { }
+//    }
+//
+//}
