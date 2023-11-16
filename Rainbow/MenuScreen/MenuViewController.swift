@@ -47,8 +47,8 @@ class MenuViewController: UIViewController {
 
     // Экран Статистики
     @objc func statisticsButtonPress() {
-            //        let gameViewController =  //название vc
-            //        navigationController?.pushViewController(gameViewController, animated: true)
+            let statisticsViewController = StatisticsViewController()
+            navigationController?.pushViewController(statisticsViewController, animated: true)
         print("Статистика")
     }
 

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		79BFEB812B06A4FE00753135 /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BFEB802B06A4FE00753135 /* StatisticsViewController.swift */; };
 		A725BBDB2B021AA40078BBFB /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A725BBDA2B021AA40078BBFB /* SettingsView.swift */; };
 		A725BBDD2B0221BD0078BBFB /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A725BBDC2B0221BD0078BBFB /* SettingsViewController.swift */; };
 		A725BBDF2B02B6B60078BBFB /* UILabel+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A725BBDE2B02B6B60078BBFB /* UILabel+Ext.swift */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		79BFEB802B06A4FE00753135 /* StatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
 		A725BBDA2B021AA40078BBFB /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		A725BBDC2B0221BD0078BBFB /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		A725BBDE2B02B6B60078BBFB /* UILabel+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Ext.swift"; sourceTree = "<group>"; };
@@ -49,6 +51,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		79BFEB7F2B06A4B400753135 /* ScreenStatistics */ = {
+			isa = PBXGroup;
+			children = (
+				79BFEB802B06A4FE00753135 /* StatisticsViewController.swift */,
+			);
+			path = ScreenStatistics;
+			sourceTree = "<group>";
+		};
 		A725BBD72B021A1A0078BBFB /* SettingsScreen */ = {
 			isa = PBXGroup;
 			children = (
@@ -77,6 +87,7 @@
 		CE79DA102AFE2BE00025ACA7 /* Rainbow */ = {
 			isa = PBXGroup;
 			children = (
+				79BFEB7F2B06A4B400753135 /* ScreenStatistics */,
 				CE79DA252AFE2C7E0025ACA7 /* Application */,
 				CE79DA272AFE2D950025ACA7 /* MenuScreen */,
 				A725BBD72B021A1A0078BBFB /* SettingsScreen */,
@@ -192,6 +203,7 @@
 				A725BBE32B02BD7C0078BBFB /* UISlider+Ext.swift in Sources */,
 				A725BBDD2B0221BD0078BBFB /* SettingsViewController.swift in Sources */,
 				CE79DA122AFE2BE00025ACA7 /* AppDelegate.swift in Sources */,
+				79BFEB812B06A4FE00753135 /* StatisticsViewController.swift in Sources */,
 				A725BBDB2B021AA40078BBFB /* SettingsView.swift in Sources */,
 				CE79DA142AFE2BE00025ACA7 /* SceneDelegate.swift in Sources */,
 				A725BBE12B02B9DD0078BBFB /* UIStackView+Ext.swift in Sources */,
