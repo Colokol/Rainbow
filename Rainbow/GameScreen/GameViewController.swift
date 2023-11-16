@@ -15,7 +15,8 @@ final class GameViewController: UIViewController {
     private let settingsModel: GameConfig
     private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     private var gameModel = GameModel(levelTime: 12)
-    private var timer: Timer?
+    private var gameSpeedTimer: Timer?
+    private var levelTimeTimer: Timer?
     private var buttons: [UIButton] = []
     private var completionWorkItem: DispatchWorkItem?
 
@@ -42,7 +43,7 @@ final class GameViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .systemGray
 
-        startTime()
+        startGameTime()
         setupButton()
     }
 
@@ -77,7 +78,8 @@ final class GameViewController: UIViewController {
     }
 
     private func stopGame() {
-        timer?.invalidate()
+        gameSpeedTimer?.invalidate()
+        levelTimeTimer?.invalidate()
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 6){
             self.saveGameData()
@@ -147,7 +149,7 @@ extension GameViewController {
 
     @objc func pauseButtonPress(){
         gameModel.timerPause.toggle()
-        gameModel.timerPause ? timer?.invalidate() : startTime()
+        gameModel.timerPause ? gameSpeedTimer?.invalidate() : startTime()
     }
 
     @objc func backButtonPress() {
@@ -162,8 +164,8 @@ extension GameViewController {
     }
 
     @objc func x2ButtonPress(){
-        timer?.invalidate()
-        timer = Timer.scheduledTimer(timeInterval: TimeInterval(settingsModel.wordChangeSpeed / 2), target: self, selector: #selector(gameTime), userInfo: nil, repeats: true)
+        gameSpeedTimer?.invalidate()
+        gameSpeedTimer = Timer.scheduledTimer(timeInterval: TimeInterval(settingsModel.wordChangeSpeed / 2), target: self, selector: #selector(gameTime), userInfo: nil, repeats: true)
         x2SpeedButton.isEnabled = false
     }
 
@@ -173,17 +175,28 @@ extension GameViewController {
 extension GameViewController {
     
     func startTime() {
-        timer = Timer.scheduledTimer(timeInterval: TimeInterval(settingsModel.wordChangeSpeed), target: self, selector: #selector(gameTime), userInfo: nil, repeats: true)
+        gameSpeedTimer = Timer.scheduledTimer(timeInterval: TimeInterval(settingsModel.wordChangeSpeed), target: self, selector: #selector(gameTime), userInfo: nil, repeats: true)
+    }
+
+    func startGameTime() {
+        startTime()
+
+        levelTimeTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
+            guard let self else {return}
+            if self.gameModel.levelTime >= 0 {
+                self.title = formattedTime(seconds: gameModel.levelTime)
+                self.gameModel.levelTime -= 1
+            }else {
+                self.title = "Время вышло"
+                self.stopGame()
+            }
+        }
     }
 
     @objc func gameTime() {
         if gameModel.levelTime >= 0 {
-            title = formattedTime(seconds: gameModel.levelTime)
-            gameModel.levelTime -= 1
-
             displayNextWords()
         }else {
-            stopGame()
         }
     }
 }
