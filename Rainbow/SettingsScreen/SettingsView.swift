@@ -8,6 +8,11 @@
 import UIKit
 
 class SettingsView: UIView {
+    var appSettings: AppSettings?
+    
+    var onColorList: (() -> Void)?
+    var onChangeRateChanged: ((Float) -> Void)?
+    var onCheckTaskChanged: ((Bool) -> Void)?
     
     let gameTimeLabel = UILabel(text: "время игры, мин")
     let gameTimeSlider = UISlider(maximumValue: 20, value: 10)
@@ -20,13 +25,24 @@ class SettingsView: UIView {
     let checkTaskLabel = UILabel(text: "игра с проверкой заданий")
     let checkTaskSwitch = UISwitch()
     
+    let lettersColor = UILabel(text: "цвета букв")
+    var colorButtons: [UIButton] = []
+    var selectedColors: Set<UIColor> = []
+    var lettersColorStack: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.spacing = 10
+        return stack
+    }()
+    
     let sizeLettersLabel = UILabel(text: "размер букв")
     
     let sizeStepper: UIStepper = {
         let sizeStepper = UIStepper()
         sizeStepper.minimumValue = 10
-        sizeStepper.maximumValue = 36
+        sizeStepper.maximumValue = 26
         sizeStepper.stepValue = 1
+        sizeStepper.value = 15
         return sizeStepper
     }()
     
@@ -53,7 +69,14 @@ class SettingsView: UIView {
         positionSC.selectedSegmentIndex = 0
         return positionSC
     }()
-    
+
+    required init(settings:AppSettings) {
+        super.init(frame: CGRect())
+        self.appSettings = settings
+        setViews()
+        setConstraints()
+    }
+
     init() {
         super.init(frame: CGRect())
         setViews()
@@ -67,8 +90,50 @@ class SettingsView: UIView {
         positionLabel.textAlignment = .left
     }
     
+    private func setupColorButtons() -> UIStackView {
+        let verticalStackView = UIStackView()
+        verticalStackView.axis = .vertical
+        verticalStackView.distribution = .fillEqually
+        verticalStackView.spacing = 10
+        
+        let firstRow = UIStackView()
+        firstRow.axis = .horizontal
+        firstRow.distribution = .fillEqually
+        firstRow.spacing = 8
+        
+        let secondRow = UIStackView()
+        secondRow.axis = .horizontal
+        secondRow.distribution = .fillEqually
+        secondRow.spacing = 8
+        
+        for i in 0..<12 {
+            let button = UIButton()
+            button.backgroundColor = Constants.color[i]
+            button.heightAnchor.constraint(equalToConstant: 30).isActive = true
+            button.widthAnchor.constraint(equalToConstant: 30).isActive = true
+            button.layer.cornerRadius = 15
+            button.clipsToBounds = true
+
+            
+            if i < 6 {
+                firstRow.addArrangedSubview(button)
+            } else {
+                secondRow.addArrangedSubview(button)
+            }
+            
+            colorButtons.append(button)
+        }
+        
+        verticalStackView.addArrangedSubview(firstRow)
+        verticalStackView.addArrangedSubview(secondRow)
+        
+        return verticalStackView
+    }
+    
+    
     // MARK: - Constraints
     func setConstraints() {
+        
         // Создание стеков для каждой настройки с горизонтальной ориентацией
         let gameTimeStack = UIStackView(
             views: [gameTimeLabel, gameTimeSlider, numberGameTime]
@@ -80,6 +145,10 @@ class SettingsView: UIView {
         
         let checkTaskStack = UIStackView(
             views: [checkTaskLabel, checkTaskSwitch]
+        )
+        
+        let lettersColorStack = UIStackView(
+            views: [lettersColor, lettersColorStack]
         )
         
         let sizeLettersStack = UIStackView(
@@ -96,7 +165,7 @@ class SettingsView: UIView {
             backgroundColorSСStack.alignment = .fill
             return backgroundColorSСStack
         }()
-
+        
         let positionSCStack: UIStackView = {
             let positionSCStack = UIStackView(views: [positionLabel, positionSC])
             positionSCStack.axis = .vertical
@@ -104,10 +173,14 @@ class SettingsView: UIView {
             return positionSCStack
         }()
         
+        let colorButtonStack = setupColorButtons()
+        lettersColorStack.addArrangedSubview(colorButtonStack)
+        addSubview(lettersColorStack)
+        
         // Создание общего вертикального стека для объединения всех настроек
         let settingsStack: UIStackView = {
             let settingsStack = UIStackView(
-                views: [gameTimeStack, changeRateStack, checkTaskStack, sizeLettersStack, lettersBaseStack, backgroundColorSСStack, positionSCStack])
+                views: [gameTimeStack, changeRateStack, checkTaskStack, lettersColorStack, sizeLettersStack, lettersBaseStack, backgroundColorSСStack, positionSCStack])
             settingsStack.axis = .vertical
             settingsStack.alignment = .fill
             settingsStack.backgroundColor = .clear
@@ -133,23 +206,8 @@ class SettingsView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    // MARK: - Actions
+
 }
 
-import SwiftUI
-
-struct SettingsViewProvider: PreviewProvider {
-    static var previews: some View {
-        ContainerView().edgesIgnoringSafeArea(.all)
-    }
-    
-    struct ContainerView: UIViewRepresentable {
-        let view = SettingsView()
-        
-        func makeUIView(context: UIViewRepresentableContext<SettingsViewProvider.ContainerView>) -> some UIView {
-            return view
-        }
-        
-        func updateUIView(_ uiView: UIViewType, context: Context) { }
-    }
-    
-}
