@@ -61,16 +61,8 @@ class MenuViewController: UIViewController {
     }
 
     @objc func rulesButtonPress() {
-        // ВРЕМЕННО УДАЛЕНИЕ Статистики
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "GamesResult")
-        let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-
-        do {
-            try context.execute(batchDeleteRequest)
-            try context.save()
-        } catch {
-            print("Failed to delete data: \(error)")
-        }
+        let helpViewController = HelpViewController()
+        navigationController?.pushViewController(helpViewController, animated: true)
     }
 
     private func loadSettings(){

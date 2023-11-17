@@ -13,6 +13,14 @@ class StatisticsViewController: UIViewController {
     var gameResult:[GamesResult] = []
     private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 
+    let clearStatisticButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Очистить статистику", for: .normal)
+        button.backgroundColor = .red
+        button.layer.cornerRadius = 10
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
 
     let tableView: UITableView = {
         let tableView = UITableView()
@@ -35,11 +43,40 @@ class StatisticsViewController: UIViewController {
 
         configureTableView()
         loadData()
+        setupView()
+    }
+
+    func setupView() {
+        clearStatisticButton.addTarget(self, action: #selector(clearStatisticPress), for: .touchUpInside)
+        view.addSubview(clearStatisticButton)
+
+        NSLayoutConstraint.activate([
+            clearStatisticButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50),
+            clearStatisticButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            clearStatisticButton.widthAnchor.constraint(equalToConstant: 200),
+            clearStatisticButton.heightAnchor.constraint(equalToConstant: 50)
+        ])
     }
 
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         tableView.frame = view.bounds
+    }
+
+    @objc func clearStatisticPress() {
+                    let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "GamesResult")
+                    let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+
+                    do {
+                        try context.execute(batchDeleteRequest)
+                        try context.save()
+                    } catch {
+                        print("Failed to delete data: \(error)")
+                    }
+        gameResult = []
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
     }
 
     private func configureTableView() {
