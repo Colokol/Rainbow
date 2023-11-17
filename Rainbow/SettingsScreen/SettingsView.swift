@@ -9,6 +9,10 @@ import UIKit
 
 class SettingsView: UIView {
     
+    var onGameTimeChanged: ((Float) -> Void)?
+    var onChangeRateChanged: ((Float) -> Void)?
+    var onCheckTaskChanged: ((Bool) -> Void)?
+    
     let gameTimeLabel = UILabel(text: "время игры, мин")
     let gameTimeSlider = UISlider(maximumValue: 20, value: 10)
     let numberGameTime = UILabel(text: "10")
@@ -21,16 +25,29 @@ class SettingsView: UIView {
     let checkTaskSwitch = UISwitch()
     
     let lettersColor = UILabel(text: "цвета букв")
-    let colors: [UIColor] = [.green, .purple, .orange, .blue, .black, .brown]
+    let colors: [UIColor] = [
+        UIColor(red: 0.86, green: 0.08, blue: 0.24, alpha: 1.0),
+        UIColor(red: 0.00, green: 0.75, blue: 1.00, alpha: 1.0),
+        UIColor(red: 0.31, green: 0.88, blue: 0.47, alpha: 1.0),
+        UIColor(red: 0.58, green: 0.00, blue: 0.83, alpha: 1.0),
+        UIColor(red: 1.00, green: 0.55, blue: 0.00, alpha: 1.0),
+        UIColor(red: 1.00, green: 0.08, blue: 0.58, alpha: 1.0),
+        UIColor(red: 1.00, green: 0.92, blue: 0.16, alpha: 1.0),
+        UIColor.black,
+        UIColor(red: 0.46, green: 0.50, blue: 0.23, alpha: 1.0),
+        UIColor(red: 0.65, green: 0.16, blue: 0.16, alpha: 1.0),
+        UIColor.gray,
+        UIColor(red: 0.06, green: 0.32, blue: 0.73, alpha: 1.0)
+    ]
     var colorButtons: [UIButton] = []
     var selectedColors: Set<UIColor> = []
     var lettersColorStack: UIStackView = {
-           let stack = UIStackView()
-           stack.axis = .vertical
-           stack.spacing = 10
-           return stack
-       }()
-
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.spacing = 10
+        return stack
+    }()
+    
     let sizeLettersLabel = UILabel(text: "размер букв")
     
     let sizeStepper: UIStepper = {
@@ -76,27 +93,49 @@ class SettingsView: UIView {
         
         backgroundColorLabel.textAlignment = .left
         positionLabel.textAlignment = .left
+        addActions()
     }
     
     private func setupColorButtons() -> UIStackView {
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.distribution = .fillEqually
-        stackView.spacing = 8
-
-        for color in colors {
+        let verticalStackView = UIStackView()
+        verticalStackView.axis = .vertical
+        verticalStackView.distribution = .fillEqually
+        verticalStackView.spacing = 10
+        
+        let firstRow = UIStackView()
+        firstRow.axis = .horizontal
+        firstRow.distribution = .fillEqually
+        firstRow.spacing = 8
+        
+        let secondRow = UIStackView()
+        secondRow.axis = .horizontal
+        secondRow.distribution = .fillEqually
+        secondRow.spacing = 8
+        
+        for i in 0..<12 {
             let button = UIButton()
-            button.backgroundColor = color
+            button.backgroundColor = colors[i]
+            button.heightAnchor.constraint(equalToConstant: 30).isActive = true
+            button.widthAnchor.constraint(equalToConstant: 30).isActive = true
             button.layer.cornerRadius = 15
             button.clipsToBounds = true
-            button.setImage(UIImage(systemName: "checkmark")?.withTintColor(.white, renderingMode: .alwaysOriginal), for: .selected)
             button.addTarget(self, action: #selector(colorButtonTapped), for: .touchUpInside)
+            
+            if i < 6 {
+                firstRow.addArrangedSubview(button)
+            } else {
+                secondRow.addArrangedSubview(button)
+            }
+            
             colorButtons.append(button)
-            stackView.addArrangedSubview(button)
         }
         
-        return stackView
+        verticalStackView.addArrangedSubview(firstRow)
+        verticalStackView.addArrangedSubview(secondRow)
+        
+        return verticalStackView
     }
+    
     
     // MARK: - Constraints
     func setConstraints() {
@@ -132,7 +171,7 @@ class SettingsView: UIView {
             backgroundColorSСStack.alignment = .fill
             return backgroundColorSСStack
         }()
-
+        
         let positionSCStack: UIStackView = {
             let positionSCStack = UIStackView(views: [positionLabel, positionSC])
             positionSCStack.axis = .vertical
@@ -174,15 +213,37 @@ class SettingsView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Actions
+    
+    private func addActions() {
+        gameTimeSlider.addTarget(self, action: #selector(gameTimeSliderChanged), for: .valueChanged)
+        changeRateSlider.addTarget(self, action: #selector(changeRateSliderChanged), for: .valueChanged)
+        checkTaskSwitch.addTarget(self, action: #selector(checkTaskSwitchChanged), for: .valueChanged)
+    }
+    
+    @objc private func gameTimeSliderChanged(_ sender: UISlider) {
+        numberGameTime.text = String(format: "%.0f", sender.value)
+        onGameTimeChanged?(sender.value)
+    }
+    
+    @objc private func changeRateSliderChanged(_ sender: UISlider) {
+        numberChangeRate.text = String(format: "%.0f", sender.value)
+        onChangeRateChanged?(sender.value)
+    }
+    
+    @objc private func checkTaskSwitchChanged(_ sender: UISwitch) {
+        onCheckTaskChanged?(sender.isOn)
+    }
+    
+    
     @objc private func colorButtonTapped(_ sender: UIButton) {
         sender.isSelected.toggle()
-        if let color = sender.backgroundColor {
-            if sender.isSelected {
-                selectedColors.insert(color)
-            } else {
-                selectedColors.remove(color)
-            }
+        if sender.isSelected {
+            sender.setImage(UIImage(systemName: "checkmark")?.withTintColor(.white, renderingMode: .alwaysOriginal), for: .selected)
+        } else {
+            sender.setImage(nil, for: .normal)
         }
+        
         // Дополнительная логика при выборе цвета
     }
 }

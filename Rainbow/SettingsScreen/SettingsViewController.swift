@@ -15,6 +15,7 @@ class SettingsViewController: UIViewController {
         super.viewDidLoad()
         view = settingsView
         showNavigationBar()
+        setActions()
     }
     
     func showNavigationBar() {
@@ -36,4 +37,23 @@ class SettingsViewController: UIViewController {
     @objc func backButtonTapped() {
         navigationController?.popViewController(animated: true)
     }
+    
+    private func setActions() {
+        settingsView.onCheckTaskChanged = { [weak self] isOn in self?.checkTaskChangedPress() }
+        settingsView.onGameTimeChanged = { [weak self] gameTime in self?.gameTimeChangedPress()  }
+        settingsView.onChangeRateChanged = { [weak self] changeRate in self?.changeRateChangedPress()  }
+    }
+    
+    func gameTimeChangedPress() {
+        print("Изменено значение время игры")
+    }
+    
+    @objc func changeRateChangedPress() {
+        print("Скорость смены заданий изменена")
+    }
+    
+    @objc func checkTaskChangedPress() {
+        print("Switch игра с проверкой заданий изменена")
+    }
+
 }
