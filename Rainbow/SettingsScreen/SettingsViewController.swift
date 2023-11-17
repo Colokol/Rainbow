@@ -40,8 +40,9 @@ class SettingsViewController: UIViewController {
     
     private func setActions() {
         settingsView.onCheckTaskChanged = { [weak self] isOn in self?.checkTaskChangedPress() }
-        settingsView.onGameTimeChanged = { [weak self] gameTime in self?.gameTimeChangedPress()  }
-        settingsView.onChangeRateChanged = { [weak self] changeRate in self?.changeRateChangedPress()  }
+        settingsView.onGameTimeChanged = { [weak self] gameTime in self?.gameTimeChangedPress() }
+        settingsView.onChangeRateChanged = { [weak self] changeRate in self?.changeRateChangedPress() }
+        settingsView.onLetterBaseChanged = { [weak self] changeRate in self?.letterBaseChangedPress() }
     }
     
     func gameTimeChangedPress() {
@@ -55,5 +56,20 @@ class SettingsViewController: UIViewController {
     @objc func checkTaskChangedPress() {
         print("Switch игра с проверкой заданий изменена")
     }
-
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "SegueIdentifier" {
+//            if let destinationVC = segue.destination as? ViewController { // Поменять VC на другой
+//                destinationVC.colors = settingsView.selectedColors
+        }
+    }
+    
+    // Функция для передачи выбранного размера шрифта на игровое View
+//    func applySettingsToGameView(_ gameView: GameView) {
+//        gameView.letterSize = settingsView.selectedLetterSize
+//    }
+    
+    @objc func letterBaseChangedPress() {
+        print("Switch подложка для букв переключена")
+    }
 }

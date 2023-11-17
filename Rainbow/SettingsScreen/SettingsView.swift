@@ -12,6 +12,7 @@ class SettingsView: UIView {
     var onGameTimeChanged: ((Float) -> Void)?
     var onChangeRateChanged: ((Float) -> Void)?
     var onCheckTaskChanged: ((Bool) -> Void)?
+    var onLetterBaseChanged: ((Bool) -> Void)?
     
     let gameTimeLabel = UILabel(text: "время игры, мин")
     let gameTimeSlider = UISlider(maximumValue: 20, value: 10)
@@ -49,7 +50,7 @@ class SettingsView: UIView {
     }()
     
     let sizeLettersLabel = UILabel(text: "размер букв")
-    
+    var selectedLetterSize: CGFloat = 14
     let sizeStepper: UIStepper = {
         let sizeStepper = UIStepper()
         sizeStepper.minimumValue = 10
@@ -57,7 +58,6 @@ class SettingsView: UIView {
         sizeStepper.stepValue = 1
         return sizeStepper
     }()
-    
     let lettersLabel = UILabel(text: "Аа")
     
     let letterBaseLabel = UILabel(text: "подложка для букв")
@@ -219,6 +219,8 @@ class SettingsView: UIView {
         gameTimeSlider.addTarget(self, action: #selector(gameTimeSliderChanged), for: .valueChanged)
         changeRateSlider.addTarget(self, action: #selector(changeRateSliderChanged), for: .valueChanged)
         checkTaskSwitch.addTarget(self, action: #selector(checkTaskSwitchChanged), for: .valueChanged)
+        sizeStepper.addTarget(self, action: #selector(sizeStepperChanged), for: .valueChanged)
+        letterBaseSwitch.addTarget(self, action: #selector(letterBaseSwitchChanged), for: .valueChanged)
     }
     
     @objc private func gameTimeSliderChanged(_ sender: UISlider) {
@@ -235,16 +237,25 @@ class SettingsView: UIView {
         onCheckTaskChanged?(sender.isOn)
     }
     
-    
     @objc private func colorButtonTapped(_ sender: UIButton) {
         sender.isSelected.toggle()
         if sender.isSelected {
             sender.setImage(UIImage(systemName: "checkmark")?.withTintColor(.white, renderingMode: .alwaysOriginal), for: .selected)
+            selectedColors.insert(sender.backgroundColor ?? UIColor.clear)
+            print("Цвет добавлен")
         } else {
             sender.setImage(nil, for: .normal)
+            selectedColors.remove(sender.backgroundColor ?? UIColor.clear)
+            print("Цвет удален")
         }
-        
-        // Дополнительная логика при выборе цвета
+    }
+    
+    @objc private func sizeStepperChanged(_ sender: UIStepper) {
+        selectedLetterSize = CGFloat(sender.value)
+    }
+    
+    @objc private func letterBaseSwitchChanged(_ sender: UISwitch) {
+        onLetterBaseChanged?(sender.isOn)
     }
 }
 
