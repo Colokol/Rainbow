@@ -10,6 +10,5 @@ import Foundation
 struct GameModel {
     var gameScore :Int = 0
     var allScore :Int = 0
-    var levelTime :Int
     var timerPause = false
 }

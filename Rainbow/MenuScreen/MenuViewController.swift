@@ -54,13 +54,15 @@ class MenuViewController: UIViewController {
         // Настройка переходов на  экраны
     //Экран Игры
     @objc func startButtonPress() {
-        let gameViewController =  GameViewController(settings: settings!)
+        guard let settings else {return}
+        let gameViewController =  GameViewController(settings: settings)
         navigationController?.pushViewController(gameViewController, animated: true)
     }
 
     //Экран Настроек
     @objc func settingsButtonPress() {
-            let settingsViewController = SettingsViewController()
+            guard let settings else {return}
+            let settingsViewController = SettingsViewController(settings: settings)
             navigationController?.pushViewController(settingsViewController, animated: true)
     }
 

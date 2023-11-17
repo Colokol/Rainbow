@@ -9,10 +9,10 @@ import UIKit
 import CoreData
 
 final class GameViewController: UIViewController {
-    private let time = 0
+    private var levelTime = 0
     private var settingsModel: AppSettings
     private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    private var gameModel = GameModel(levelTime: 12)
+    private var gameModel = GameModel()
     private var gameSpeedTimer: Timer?
     private var levelTimeTimer: Timer?
     private var buttons: [UIButton] = []
@@ -30,6 +30,7 @@ final class GameViewController: UIViewController {
 
     init(settings:AppSettings) {
         self.settingsModel = settings
+        levelTime = Int(settings.timeGame)
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -39,10 +40,10 @@ final class GameViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemGray
+        view.backgroundColor = UIColor(named: settingsModel.backgroundColor!)
         title = formattedTime(seconds: Int(settingsModel.timeGame))  
-        displayNextWords()
         startGameTime()
+        displayNextWords()
         setupButton()
     }
 
@@ -51,8 +52,15 @@ final class GameViewController: UIViewController {
         levelTimeTimer?.invalidate()
         gameSpeedTimer?.invalidate()
     }
+    
+
+
 
     private func setupButton() {
+
+        let appearance = UINavigationBarAppearance()
+        appearance.titleTextAttributes = [.font: UIFont.boldSystemFont(ofSize: 24), .foregroundColor: UIColor.black]
+        navigationController?.navigationBar.standardAppearance = appearance
 
         let pauseButton = UIBarButtonItem(image: UIImage(systemName: "pause.fill"),
                                           style: .plain,
@@ -79,6 +87,14 @@ final class GameViewController: UIViewController {
             x2SpeedButton.heightAnchor.constraint(equalToConstant: 50),
             x2SpeedButton.widthAnchor.constraint(equalToConstant: 50)
         ])
+
+            if settingsModel.backgroundColor == "black" {
+                appearance.titleTextAttributes = [.font: UIFont.boldSystemFont(ofSize: 24), .foregroundColor: UIColor.white]
+                navigationController?.navigationBar.standardAppearance = appearance
+                pauseButton.tintColor = .white
+                x2SpeedButton.tintColor = .white
+                backButton.tintColor = .white
+            }
 
     }
 
@@ -154,7 +170,12 @@ extension GameViewController {
 
     @objc func pauseButtonPress(){
         gameModel.timerPause.toggle()
-        gameModel.timerPause ? gameSpeedTimer?.invalidate() : startTime()
+        if gameModel.timerPause {
+            gameSpeedTimer?.invalidate()
+            levelTimeTimer?.invalidate()
+        }else {
+            startGameTime()
+        }
     }
 
     @objc func backButtonPress() {
@@ -162,6 +183,7 @@ extension GameViewController {
     }
 
     @objc func correctTap(sender: UIButton) {
+        guard settingsModel.checkAnswear else {return}
         gameModel.gameScore += 1
 
         sender.setTitle("Верно", for: .normal)
@@ -188,9 +210,9 @@ extension GameViewController {
 
         levelTimeTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
             guard let self else {return}
-            if self.settingsModel.timeGame >= 0 {
-                self.title = formattedTime(seconds: Int(settingsModel.timeGame))
-                self.settingsModel.timeGame -= 1
+            if self.levelTime >= 0 {
+                self.title = formattedTime(seconds: levelTime)
+                self.levelTime -= 1
             }else {
                 self.title = "Время вышло"
                 self.stopGame()
@@ -199,9 +221,8 @@ extension GameViewController {
     }
 
     @objc func gameTime() {
-        if gameModel.levelTime >= 0 {
+        if  levelTime >= 0 {
             displayNextWords()
-        }else {
         }
     }
 }

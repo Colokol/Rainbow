@@ -54,8 +54,9 @@ class SettingsView: UIView {
     let sizeStepper: UIStepper = {
         let sizeStepper = UIStepper()
         sizeStepper.minimumValue = 10
-        sizeStepper.maximumValue = 36
+        sizeStepper.maximumValue = 26
         sizeStepper.stepValue = 1
+        sizeStepper.value = 15
         return sizeStepper
     }()
     
