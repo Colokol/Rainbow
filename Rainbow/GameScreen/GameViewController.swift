@@ -52,9 +52,6 @@ final class GameViewController: UIViewController {
         levelTimeTimer?.invalidate()
         gameSpeedTimer?.invalidate()
     }
-    
-
-
 
     private func setupButton() {
 
@@ -102,7 +99,7 @@ final class GameViewController: UIViewController {
         gameSpeedTimer?.invalidate()
         levelTimeTimer?.invalidate()
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 6){
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5){
             self.saveGameData()
             self.goStatisticsScreen()
         }
@@ -113,6 +110,8 @@ final class GameViewController: UIViewController {
         navigationController?.pushViewController(statisticsVC, animated: false)
     }
 
+    
+
     private func displayNextWords() {
 
         if buttons.count > 15 {
@@ -120,29 +119,57 @@ final class GameViewController: UIViewController {
             firstButton.removeFromSuperview()
         }
 
-        let wordButton = createWordButton()
+        if settingsModel.staticGameMode {
+            let wordButton = createStaticButton()
+            view.addSubview(wordButton)
+            buttons.append(wordButton)
+        }else {
+            let wordButton = createWordButton()
 
-        let animator = UIViewPropertyAnimator(duration: 6.0, curve: .linear) {
-            wordButton.frame.origin.y = self.view.frame.height
+            let animator = UIViewPropertyAnimator(duration: 6.0, curve: .linear) {
+                wordButton.frame.origin.y = self.view.frame.height
+            }
+            animator.startAnimation()
+            view.addSubview(wordButton)
+            buttons.append(wordButton)
         }
-        animator.startAnimation()
 
-        view.addSubview(wordButton)
-        buttons.append(wordButton)
+
         gameModel.allScore += 1
+    }
+
+    private func createStaticButton() -> UIButton {
+        let wordButton = UIButton(frame: CGRect(x: (view.bounds.width - 170) / 2 , y: (view.bounds.height - 50) / 2, width: 170, height: 50))
+        wordButton.layer.cornerRadius = 10
+        wordButton.setTitle(Constants.colorNames.randomElement(), for: .normal)
+        wordButton.titleLabel?.font = UIFont(name: "Helvetica-Bold", size: CGFloat(settingsModel.letterSize))
+        wordButton.setTitleColor(.white, for: .normal)
+        wordButton.addTarget(self, action: #selector(correctTap), for: .touchUpInside)
+
+        if settingsModel.backgroundActive {
+            wordButton.backgroundColor = Constants.color.randomElement()
+        }else {
+            wordButton.setTitleColor(Constants.color.randomElement(), for: .normal)
+        }
+        return wordButton
     }
 
     private func createWordButton() -> UIButton {
 
-        let randomX = CGFloat.random(in: 10...(view.frame.width - 150))
+        let randomX = CGFloat.random(in: 10...(view.frame.width - 170))
 
-        let wordButton = UIButton(frame: CGRect(x: randomX, y: 90, width: 150, height: 50))
+        let wordButton = UIButton(frame: CGRect(x: randomX, y: 90, width: 170, height: 50))
         wordButton.layer.cornerRadius = 10
         wordButton.setTitle(Constants.colorNames.randomElement(), for: .normal)
-        wordButton.titleLabel?.font = UIFont(name: "Helvetica-Bold", size: 16)
+        wordButton.titleLabel?.font = UIFont(name: "Helvetica-Bold", size: CGFloat(settingsModel.letterSize))
         wordButton.setTitleColor(.white, for: .normal)
-        wordButton.backgroundColor = Constants.color.randomElement()
         wordButton.addTarget(self, action: #selector(correctTap), for: .touchUpInside)
+
+        if settingsModel.backgroundActive {
+            wordButton.backgroundColor = Constants.color.randomElement()
+        }else {
+            wordButton.setTitleColor(Constants.color.randomElement(), for: .normal)
+        }
         return wordButton
     }
 
@@ -174,6 +201,7 @@ extension GameViewController {
             gameSpeedTimer?.invalidate()
             levelTimeTimer?.invalidate()
         }else {
+            displayNextWords()
             startGameTime()
         }
     }

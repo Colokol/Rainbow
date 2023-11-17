@@ -10,7 +10,7 @@ import UIKit
 class SettingsView: UIView {
     var appSettings: AppSettings?
     
-    var onGameTimeChanged: ((Float) -> Void)?
+    var onColorList: (() -> Void)?
     var onChangeRateChanged: ((Float) -> Void)?
     var onCheckTaskChanged: ((Bool) -> Void)?
     
@@ -26,20 +26,6 @@ class SettingsView: UIView {
     let checkTaskSwitch = UISwitch()
     
     let lettersColor = UILabel(text: "цвета букв")
-    let colors: [UIColor] = [
-        UIColor(red: 0.86, green: 0.08, blue: 0.24, alpha: 1.0),
-        UIColor(red: 0.00, green: 0.75, blue: 1.00, alpha: 1.0),
-        UIColor(red: 0.31, green: 0.88, blue: 0.47, alpha: 1.0),
-        UIColor(red: 0.58, green: 0.00, blue: 0.83, alpha: 1.0),
-        UIColor(red: 1.00, green: 0.55, blue: 0.00, alpha: 1.0),
-        UIColor(red: 1.00, green: 0.08, blue: 0.58, alpha: 1.0),
-        UIColor(red: 1.00, green: 0.92, blue: 0.16, alpha: 1.0),
-        UIColor.black,
-        UIColor(red: 0.46, green: 0.50, blue: 0.23, alpha: 1.0),
-        UIColor(red: 0.65, green: 0.16, blue: 0.16, alpha: 1.0),
-        UIColor.gray,
-        UIColor(red: 0.06, green: 0.32, blue: 0.73, alpha: 1.0)
-    ]
     var colorButtons: [UIButton] = []
     var selectedColors: Set<UIColor> = []
     var lettersColorStack: UIStackView = {
@@ -102,7 +88,6 @@ class SettingsView: UIView {
         
         backgroundColorLabel.textAlignment = .left
         positionLabel.textAlignment = .left
-        addActions()
     }
     
     private func setupColorButtons() -> UIStackView {
@@ -123,12 +108,12 @@ class SettingsView: UIView {
         
         for i in 0..<12 {
             let button = UIButton()
-            button.backgroundColor = colors[i]
+            button.backgroundColor = Constants.color[i]
             button.heightAnchor.constraint(equalToConstant: 30).isActive = true
             button.widthAnchor.constraint(equalToConstant: 30).isActive = true
             button.layer.cornerRadius = 15
             button.clipsToBounds = true
-            button.addTarget(self, action: #selector(colorButtonTapped), for: .touchUpInside)
+
             
             if i < 6 {
                 firstRow.addArrangedSubview(button)
@@ -223,55 +208,6 @@ class SettingsView: UIView {
     }
     
     // MARK: - Actions
-    
-    private func addActions() {
-        gameTimeSlider.addTarget(self, action: #selector(gameTimeSliderChanged), for: .valueChanged)
-        changeRateSlider.addTarget(self, action: #selector(changeRateSliderChanged), for: .valueChanged)
-        checkTaskSwitch.addTarget(self, action: #selector(checkTaskSwitchChanged), for: .valueChanged)
-    }
-    
-    @objc private func gameTimeSliderChanged(_ sender: UISlider) {
-        numberGameTime.text = String(format: "%.0f", sender.value)
-        onGameTimeChanged?(sender.value)
-    }
-    
-    @objc private func changeRateSliderChanged(_ sender: UISlider) {
-        numberChangeRate.text = String(format: "%.0f", sender.value)
-        onChangeRateChanged?(sender.value)
-    }
-    
-    @objc private func checkTaskSwitchChanged(_ sender: UISwitch) {
-        onCheckTaskChanged?(sender.isOn)
-    }
-    
-    
-    @objc private func colorButtonTapped(_ sender: UIButton) {
-        sender.isSelected.toggle()
-        if sender.isSelected {
-            sender.setImage(UIImage(systemName: "checkmark")?.withTintColor(.white, renderingMode: .alwaysOriginal), for: .selected)
-        } else {
-            sender.setImage(nil, for: .normal)
-        }
-        
-        // Дополнительная логика при выборе цвета
-    }
+
 }
 
-//import SwiftUI
-//
-//struct SettingsViewProvider: PreviewProvider {
-//    static var previews: some View {
-//        ContainerView().edgesIgnoringSafeArea(.all)
-//    }
-//
-//    struct ContainerView: UIViewRepresentable {
-//        let view = SettingsView()
-//
-//        func makeUIView(context: UIViewRepresentableContext<SettingsViewProvider.ContainerView>) -> some UIView {
-//            return view
-//        }
-//
-//        func updateUIView(_ uiView: UIViewType, context: Context) { }
-//    }
-//
-//}

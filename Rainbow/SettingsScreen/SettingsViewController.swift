@@ -14,6 +14,7 @@ class SettingsViewController: UIViewController {
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     var settings: AppSettings?
     let settingsModel:AppSettings
+    var selectedColors: Set<UIColor> = []
 
     init(settings:AppSettings) {
         self.settingsModel = settings
@@ -44,7 +45,7 @@ class SettingsViewController: UIViewController {
         settingsView.letterBaseSwitch.isOn = settings.backgroundActive
         settingsView.lettersLabel.font = .systemFont(ofSize: CGFloat(settings.letterSize))
         settingsView.sizeStepper.value = Double(settings.letterSize)
-
+        settingsView.positionSC.selectedSegmentIndex = settings.staticGameMode ? 1 : 0
         switch settings.backgroundColor {
             case "white":
                 settingsView.backgroundColorSC.selectedSegmentIndex = 0
@@ -64,6 +65,9 @@ class SettingsViewController: UIViewController {
         settingsView.sizeStepper.addTarget(self, action: #selector(sizeStepperTap(sender:)), for: .valueChanged)
         settingsView.backgroundColorSC.addTarget(self, action: #selector(segmentChanged(_:)), for: .valueChanged)
         settingsView.positionSC.addTarget(self, action: #selector(segmentChanged(_:)), for: .valueChanged)
+        settingsView.colorButtons.forEach { button in
+            button.addTarget(self, action: #selector(colorButtonTapped(_:)), for: .touchUpInside)
+        }
     }
 
 
@@ -101,21 +105,37 @@ class SettingsViewController: UIViewController {
             case settingsView.backgroundColorSC:
                 switch sender.selectedSegmentIndex{
                     case 0: settings?.backgroundColor = "white"
-                            print("0")
                     case 1: settings?.backgroundColor = "systemGray6"
-                        print("1")
-
                     case 2: settings?.backgroundColor = "black"
-                        print("2")
-
                     default:
                         settings?.backgroundColor = "systemGray6"
                 }
             case settingsView.positionSC:
-                print(sender.selectedSegmentIndex)
+                switch sender.selectedSegmentIndex {
+                    case 0 : settings?.staticGameMode = false
+                    case 1 : settings?.staticGameMode = true
+                    default: settings?.staticGameMode = true
+                }
             default:
                 print("error segment switch")
         }
+    }
+
+    @objc func colorButtonTapped(_ sender: UIButton){
+        sender.isSelected.toggle()
+        if let color = sender.backgroundColor {
+            if sender.isSelected {
+                selectedColors.insert(color)
+            } else {
+                selectedColors.remove(color)
+            }
+            if sender.isSelected {
+                sender.setImage(UIImage(systemName: "checkmark")?.withTintColor(.white, renderingMode: .alwaysOriginal), for: .selected)
+            } else {
+                sender.setImage(nil, for: .normal)
+            }
+        }
+
     }
 
     private func loadSettings(){
@@ -126,8 +146,6 @@ class SettingsViewController: UIViewController {
                 DispatchQueue.main.async {
                     self.settings = settings
                 }
-            } else {
-                    // Создать новые настройки, если они отсутствуют
             }
         } catch {
             print("Error: \(error)")
@@ -166,4 +184,6 @@ class SettingsViewController: UIViewController {
         super.viewWillDisappear(animated)
         saveSettings()
     }
+
 }
+

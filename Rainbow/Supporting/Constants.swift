@@ -18,7 +18,7 @@ enum Constants {
 
     static let colorNames = [
         "Синий",
-        "Темно-зелёный",
+        "Салатовый",
         "Фиолетовый",
         "Зелёный",
         "Серый",
@@ -33,7 +33,7 @@ enum Constants {
 
     static let color = [
         UIColor(red: 5/255, green: 195/255, blue: 255/255, alpha: 1.0),
-        UIColor(red: 37/255, green: 59/255, blue: 2/255, alpha: 1.0),
+        UIColor(red: 0.43, green: 0.81, blue: 0.47, alpha: 1.0),
         UIColor(red: 70/255, green: 5/255, blue: 255/255, alpha: 1.0),
         UIColor(red: 70/255, green: 255/255, blue: 5/255, alpha: 1.0),
         UIColor(red: 94/255, green: 84/255, blue: 91/255, alpha: 1.0),
