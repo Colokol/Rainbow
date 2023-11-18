@@ -238,9 +238,9 @@ extension GameViewController {
         startTime()
 
         levelTimeTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
-            guard let self = self else {return}
+            guard let self else {return}
             if self.levelTime >= 0 {
-                self.title = self.formattedTime(seconds: self.levelTime)
+                self.title = formattedTime(seconds: levelTime)
                 self.levelTime -= 1
             }else {
                 self.title = "Время вышло"
