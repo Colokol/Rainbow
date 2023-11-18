@@ -17,6 +17,7 @@ final class GameViewController: UIViewController {
     private var levelTimeTimer: Timer?
     private var buttons: [UIButton] = []
     private var completionWorkItem: DispatchWorkItem?
+    private var currentWordButton: UIButton?
 
 
     private let x2SpeedButton: UIButton = {
@@ -139,6 +140,7 @@ final class GameViewController: UIViewController {
     }
 
     private func createStaticButton() -> UIButton {
+        currentWordButton?.removeFromSuperview()
         let wordButton = UIButton(frame: CGRect(x: (view.bounds.width - 170) / 2 , y: (view.bounds.height - 50) / 2, width: 170, height: 50))
         wordButton.layer.cornerRadius = 10
         wordButton.setTitle(Constants.colorNames.randomElement(), for: .normal)
@@ -151,6 +153,7 @@ final class GameViewController: UIViewController {
         }else {
             wordButton.setTitleColor(Constants.color.randomElement(), for: .normal)
         }
+        currentWordButton = wordButton
         return wordButton
     }
 
