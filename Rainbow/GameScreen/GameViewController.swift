@@ -179,6 +179,7 @@ final class GameViewController: UIViewController {
         let formatter = DateComponentsFormatter()
         formatter.unitsStyle = .positional
         formatter.allowedUnits = [.minute, .second]
+        formatter.zeroFormattingBehavior = .pad
 
         return formatter.string(from: timeInterval) ?? ""
     }
@@ -237,9 +238,9 @@ extension GameViewController {
         startTime()
 
         levelTimeTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
-            guard let self else {return}
+            guard let self = self else {return}
             if self.levelTime >= 0 {
-                self.title = formattedTime(seconds: levelTime)
+                self.title = self.formattedTime(seconds: self.levelTime)
                 self.levelTime -= 1
             }else {
                 self.title = "Время вышло"
