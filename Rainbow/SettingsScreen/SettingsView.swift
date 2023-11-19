@@ -200,7 +200,8 @@ class SettingsView: UIView {
         // Установка ширины для слайдеров
         gameTimeSlider.widthAnchor.constraint(equalToConstant: 110).isActive = true
         changeRateSlider.widthAnchor.constraint(equalToConstant: 110).isActive = true
-        
+        numberGameTime.widthAnchor.constraint(equalToConstant: 20).isActive = true
+        numberChangeRate.widthAnchor.constraint(equalToConstant: 20).isActive = true
     }
     
     required init?(coder: NSCoder) {

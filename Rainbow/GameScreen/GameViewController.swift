@@ -18,7 +18,6 @@ final class GameViewController: UIViewController {
     private var buttons: [UIButton] = []
     private var completionWorkItem: DispatchWorkItem?
 
-
     private let x2SpeedButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -139,6 +138,8 @@ final class GameViewController: UIViewController {
     }
 
     private func createStaticButton() -> UIButton {
+        buttons.forEach { $0.removeFromSuperview() }
+        
         let wordButton = UIButton(frame: CGRect(x: (view.bounds.width - 170) / 2 , y: (view.bounds.height - 50) / 2, width: 170, height: 50))
         wordButton.layer.cornerRadius = 10
         wordButton.setTitle(Constants.colorNames.randomElement(), for: .normal)
@@ -151,6 +152,7 @@ final class GameViewController: UIViewController {
         }else {
             wordButton.setTitleColor(Constants.color.randomElement(), for: .normal)
         }
+        
         return wordButton
     }
 
@@ -179,6 +181,7 @@ final class GameViewController: UIViewController {
         let formatter = DateComponentsFormatter()
         formatter.unitsStyle = .positional
         formatter.allowedUnits = [.minute, .second]
+        formatter.zeroFormattingBehavior = .pad
 
         return formatter.string(from: timeInterval) ?? ""
     }
@@ -213,6 +216,7 @@ extension GameViewController {
     @objc func correctTap(sender: UIButton) {
         guard settingsModel.checkAnswear else {return}
         gameModel.gameScore += 1
+        sender.isEnabled = false
 
         sender.setTitle("Верно", for: .normal)
         sender.backgroundColor = .systemGreen
