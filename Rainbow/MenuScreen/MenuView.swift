@@ -106,7 +106,7 @@ class MenuView: UIView {
         buttonStackView.spacing = 15
         buttonStackView.distribution = .fillEqually
 
-        self.backgroundColor = .lightGray
+        self.backgroundColor = .systemGray6
         self.addSubview(imageView)
         self.addSubview(rainbowLabel)
         self.addSubview(buttonStackView)
