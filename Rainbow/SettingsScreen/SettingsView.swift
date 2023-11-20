@@ -19,7 +19,7 @@ class SettingsView: UIView {
     let numberGameTime = UILabel(text: "10")
     
     let changeRateLabel = UILabel(text: "скорость смены заданий, сек")
-    let changeRateSlider = UISlider(maximumValue: 4, value: 2)
+    let changeRateSlider = UISlider(maximumValue: 5, value: 2)
     let numberChangeRate = UILabel(text: "2")
     
     let checkTaskLabel = UILabel(text: "игра с проверкой заданий")

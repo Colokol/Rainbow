@@ -10,9 +10,8 @@ import CoreData
 
 class MenuViewController: UIViewController {
 
-    private var menuView: MenuView {self.view as! MenuView}
     var settings: AppSettings?
-
+    private var menuView: MenuView {self.view as! MenuView}
     private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 
     override func loadView() {
@@ -29,6 +28,18 @@ class MenuViewController: UIViewController {
         loadSettings()
     }
 
+    private func loadSettings(){
+        let request: NSFetchRequest<AppSettings> = AppSettings.fetchRequest()
+        do{
+            let data = try self.context.fetch(request)
+            DispatchQueue.main.async {
+                self.settings = data[0]
+            }
+        }catch {
+            print("Error load data")
+        }
+    }
+
         // MARK: - Actions
 
     private func setActions() {
@@ -39,7 +50,6 @@ class MenuViewController: UIViewController {
         menuView.onRulesButton = { [weak self] in self?.rulesButtonPress() }
     }
 
-        // Настройка переходов на  экраны
         //Экран Игры
     @objc func startButtonPress() {
         guard let settings else {return}
@@ -56,25 +66,14 @@ class MenuViewController: UIViewController {
 
         // Экран Статистики
     @objc func statisticsButtonPress() {
-        let statisticsVC = StatisticsViewController()
-        navigationController?.pushViewController(statisticsVC, animated: true)
+        let statisticsViewController = StatisticsViewController()
+        navigationController?.pushViewController(statisticsViewController, animated: true)
     }
 
+        // Экран правил
     @objc func rulesButtonPress() {
         let helpViewController = HelpViewController()
         navigationController?.pushViewController(helpViewController, animated: true)
-    }
-
-    private func loadSettings(){
-        let request: NSFetchRequest<AppSettings> = AppSettings.fetchRequest()
-        do{
-            let data = try self.context.fetch(request)
-            DispatchQueue.main.async {
-                self.settings = data[0]
-            }
-        }catch {
-            print("Error")
-        }
     }
 
 }

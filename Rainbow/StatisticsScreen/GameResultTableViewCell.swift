@@ -48,7 +48,17 @@ class GameResultTableViewCell: UITableViewCell {
 
     }
 
-    func setupView() {
+    func configureCell(game: GamesResult, gameNumber: Int) {
+        let allscore = Double(game.allScore)
+        let gamescore = Double(game.gameScore)
+        let percent = (gamescore / allscore) * 100
+
+        gameNumberLabel.text = "Игра номер: \(gameNumber)"
+        correctPercentLabel.text = String(format: "Правильных ответов: %.0f%%", percent)
+        gameTimeLabel.text = "\(game.levelTime) секунд. Скорость игры: х\(6 - game.gameSpeed)"
+    }
+
+    private func setupView() {
         addSubview(correctPercentLabel)
         addSubview(gameTimeLabel)
         addSubview(gameNumberLabel)
@@ -66,17 +76,4 @@ class GameResultTableViewCell: UITableViewCell {
 
         ])
     }
-
-
-    func configureCell(game: GamesResult, gameNumber: Int) {
-        let allscore = Double(game.allScore)
-        let gamescore = Double(game.gameScore)
-        let percent = (gamescore / allscore) * 100
-
-        gameNumberLabel.text = "Игра номер: \(gameNumber)"
-        correctPercentLabel.text = String(format: "Правильных ответов: %.0f%%", percent)
-        gameTimeLabel.text = "\(game.levelTime) секунд"
-    }
-
-
 }

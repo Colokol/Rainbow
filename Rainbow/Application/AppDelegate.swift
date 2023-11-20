@@ -24,7 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let settings = AppSettings(context: context)
             settings.backgroundActive = false
             settings.backgroundColor = "systemGray6"
-            settings.checkAnswear = false
+            settings.checkAnswer = false
             settings.letterSize = 15
             settings.timeGame = 120
             settings.wordChangeSpeed = 1

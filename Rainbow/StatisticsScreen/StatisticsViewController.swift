@@ -10,10 +10,10 @@ import CoreData
 
 class StatisticsViewController: UIViewController {
 
-    var gameResult:[GamesResult] = []
+    private var gameResult:[GamesResult] = []
     private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 
-    let clearStatisticButton: UIButton = {
+    private let clearStatisticButton: UIButton = {
         let button = UIButton()
         button.setTitle("Очистить статистику", for: .normal)
         button.backgroundColor = .red
@@ -22,31 +22,30 @@ class StatisticsViewController: UIViewController {
         return button
     }()
 
-    let tableView: UITableView = {
+    private let tableView: UITableView = {
         let tableView = UITableView()
-
         return tableView
     }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        
-        let backButton = UIBarButtonItem(image: UIImage(systemName: "arrowshape.backward.fill"),
-                                         style: .plain,
-                                         target: self,
-                                         action: #selector(backButtonPress))
-        backButton.tintColor = .black
-
-        navigationItem.leftBarButtonItem = backButton
-        navigationController?.navigationItem.hidesBackButton = true
 
         configureTableView()
         loadData()
         setupView()
     }
 
-    func setupView() {
+    private func setupView() {
+
+        let backButton = UIBarButtonItem(image: UIImage(systemName: "arrowshape.backward.fill"),
+                                         style: .plain,
+                                         target: self,
+                                         action: #selector(backButtonPress))
+        backButton.tintColor = .black
+        navigationItem.leftBarButtonItem = backButton
+        navigationController?.navigationItem.hidesBackButton = true
+
         clearStatisticButton.addTarget(self, action: #selector(clearStatisticPress), for: .touchUpInside)
         view.addSubview(clearStatisticButton)
 
@@ -61,22 +60,6 @@ class StatisticsViewController: UIViewController {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         tableView.frame = view.bounds
-    }
-
-    @objc func clearStatisticPress() {
-                    let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "GamesResult")
-                    let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-
-                    do {
-                        try context.execute(batchDeleteRequest)
-                        try context.save()
-                    } catch {
-                        print("Failed to delete data: \(error)")
-                    }
-        gameResult = []
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-        }
     }
 
     private func configureTableView() {
@@ -99,6 +82,24 @@ class StatisticsViewController: UIViewController {
             }catch {
                 print("Error")
             }
+    }
+
+    // MARK: - Actions
+
+    @objc func clearStatisticPress() {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "GamesResult")
+        let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+
+        do {
+            try context.execute(batchDeleteRequest)
+            try context.save()
+        } catch {
+            print("Failed to delete data: \(error)")
+        }
+        gameResult = []
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
     }
 
     @objc func backButtonPress() {

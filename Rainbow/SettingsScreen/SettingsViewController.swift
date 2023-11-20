@@ -10,11 +10,11 @@ import CoreData
 
 class SettingsViewController: UIViewController {
 
-    var settingsView = SettingsView()
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     var settings: AppSettings?
-    let settingsModel:AppSettings
-    var selectedColors: Set<UIColor> = []
+    private var settingsView = SettingsView()
+    private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    private let settingsModel:AppSettings
+    private var selectedColors: Set<UIColor> = []
 
     init(settings:AppSettings) {
         self.settingsModel = settings
@@ -36,12 +36,19 @@ class SettingsViewController: UIViewController {
         setSettingsValue(settings: settingsModel)
     }
 
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        saveSettings()
+    }
+
+    // MARK: - Configuration View
+
     func setSettingsValue(settings:AppSettings){
         settingsView.numberChangeRate.text = String(settings.wordChangeSpeed)
         settingsView.changeRateSlider.value = Float(settings.wordChangeSpeed)
         settingsView.gameTimeSlider.value = Float(settings.timeGame / 60)
         settingsView.numberGameTime.text = String(settings.timeGame / 60)
-        settingsView.checkTaskSwitch.isOn = settings.checkAnswear
+        settingsView.checkTaskSwitch.isOn = settings.checkAnswer
         settingsView.letterBaseSwitch.isOn = settings.backgroundActive
         settingsView.lettersLabel.font = .systemFont(ofSize: CGFloat(settings.letterSize))
         settingsView.sizeStepper.value = Double(settings.letterSize)
@@ -70,12 +77,30 @@ class SettingsViewController: UIViewController {
         }
     }
 
+    func showNavigationBar() {
+        title = "Настройки"
+
+        let appearance = UINavigationBarAppearance()
+        appearance.titleTextAttributes = [.font: UIFont.boldSystemFont(ofSize: 24)]
+        navigationController?.navigationBar.standardAppearance = appearance
+
+        let backButton = UIBarButtonItem(image: UIImage(systemName: "arrowshape.backward.fill"),
+                                         style: .plain,
+                                         target: self,
+                                         action: #selector(backButtonTapped))
+
+        backButton.tintColor = .black
+        navigationItem.leftBarButtonItem = backButton
+    }
+
+
+    // MARK: -  Actions
 
     @objc func sliderChange(sender: UISlider){
         switch sender {
             case settingsView.gameTimeSlider:
                 settingsView.numberGameTime.text = String(Int(sender.value))
-                settings?.timeGame = Int16(sender.value) * 60
+                settings?.timeGame = Int16(sender.value) 
             case settingsView.changeRateSlider:
                 settingsView.numberChangeRate.text = String(Int(sender.value))
                 settings?.wordChangeSpeed = Int16(sender.value)
@@ -87,7 +112,7 @@ class SettingsViewController: UIViewController {
     @objc func switchValueChanged(sender:UISwitch) {
         switch sender {
             case settingsView.checkTaskSwitch:
-                settings?.checkAnswear = sender.isOn
+                settings?.checkAnswer = sender.isOn
             case settingsView.letterBaseSwitch:
                 settings?.backgroundActive = sender.isOn
             default:
@@ -108,7 +133,7 @@ class SettingsViewController: UIViewController {
                     case 1: settings?.backgroundColor = "systemGray6"
                     case 2: settings?.backgroundColor = "black"
                     default:
-                        settings?.backgroundColor = "systemGray6"
+                        print("error segment switch")
                 }
             case settingsView.positionSC:
                 switch sender.selectedSegmentIndex {
@@ -138,6 +163,12 @@ class SettingsViewController: UIViewController {
 
     }
 
+    @objc func backButtonTapped() {
+        navigationController?.popViewController(animated: true)
+    }
+
+    // MARK: -  Core Data
+
     private func loadSettings(){
         let request: NSFetchRequest<AppSettings> = AppSettings.fetchRequest()
         do {
@@ -152,37 +183,12 @@ class SettingsViewController: UIViewController {
         }
     }
 
-    func showNavigationBar() {
-        title = "Настройки"
-        
-        let appearance = UINavigationBarAppearance()
-        appearance.titleTextAttributes = [.font: UIFont.boldSystemFont(ofSize: 24)]
-        navigationController?.navigationBar.standardAppearance = appearance
-        
-        let backButton = UIBarButtonItem(image: UIImage(systemName: "arrowshape.backward.fill"),
-                                         style: .plain,
-                                         target: self,
-                                         action: #selector(backButtonTapped))
-        
-        backButton.tintColor = .black
-        navigationItem.leftBarButtonItem = backButton
-    }
-    
-    @objc func backButtonTapped() {
-        navigationController?.popViewController(animated: true)
-    }
-
     private func saveSettings() {
         do {
             try self.context.save()
         } catch {
             print("Error saving settings: \(error)")
         }
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        saveSettings()
     }
 
 }

@@ -53,28 +53,35 @@ final class GameViewController: UIViewController {
     }
 
     private func setupButton() {
-
-        let appearance = UINavigationBarAppearance()
-        appearance.titleTextAttributes = [.font: UIFont.boldSystemFont(ofSize: 24), .foregroundColor: UIColor.black]
-        navigationController?.navigationBar.standardAppearance = appearance
-
         let pauseButton = UIBarButtonItem(image: UIImage(systemName: "pause.fill"),
                                           style: .plain,
                                           target: self,
                                           action: #selector(pauseButtonPress))
-        pauseButton.tintColor = .black
-        navigationItem.rightBarButtonItem = pauseButton
 
         let backButton = UIBarButtonItem(image: UIImage(systemName: "arrowshape.backward.fill"),
                                          style: .plain,
                                          target: self,
                                          action: #selector(backButtonPress))
-        backButton.tintColor = .black
 
+        let appearance = UINavigationBarAppearance()
+
+        if settingsModel.backgroundColor == "black" {
+            appearance.titleTextAttributes = [.font: UIFont.boldSystemFont(ofSize: 24), .foregroundColor: UIColor.white]
+            pauseButton.tintColor = .white
+            x2SpeedButton.tintColor = .white
+            backButton.tintColor = .white
+        }else {
+            appearance.titleTextAttributes = [.font: UIFont.boldSystemFont(ofSize: 24), .foregroundColor: UIColor.black]
+            pauseButton.tintColor = .black
+            backButton.tintColor = .black
+        }
+
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationItem.rightBarButtonItem = pauseButton
         navigationItem.leftBarButtonItem = backButton
         navigationController?.navigationItem.hidesBackButton = true
-
         view.addSubview(x2SpeedButton)
+
         x2SpeedButton.addTarget(self, action: #selector(x2ButtonPress), for: .touchUpInside)
 
         NSLayoutConstraint.activate([
@@ -83,22 +90,13 @@ final class GameViewController: UIViewController {
             x2SpeedButton.heightAnchor.constraint(equalToConstant: 50),
             x2SpeedButton.widthAnchor.constraint(equalToConstant: 50)
         ])
-
-            if settingsModel.backgroundColor == "black" {
-                appearance.titleTextAttributes = [.font: UIFont.boldSystemFont(ofSize: 24), .foregroundColor: UIColor.white]
-                navigationController?.navigationBar.standardAppearance = appearance
-                pauseButton.tintColor = .white
-                x2SpeedButton.tintColor = .white
-                backButton.tintColor = .white
-            }
-
     }
 
     private func stopGame() {
         gameSpeedTimer?.invalidate()
         levelTimeTimer?.invalidate()
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5){
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2){
             self.saveGameData()
             self.goStatisticsScreen()
         }
@@ -138,7 +136,10 @@ final class GameViewController: UIViewController {
     }
 
     private func createStaticButton() -> UIButton {
-        buttons.forEach { $0.removeFromSuperview() }
+        buttons.forEach {
+            $0.removeFromSuperview()
+            buttons = []
+        }
         
         let wordButton = UIButton(frame: CGRect(x: (view.bounds.width - 170) / 2 , y: (view.bounds.height - 50) / 2, width: 170, height: 50))
         wordButton.layer.cornerRadius = 10
@@ -191,6 +192,7 @@ final class GameViewController: UIViewController {
         gameStat.allScore = Int64(gameModel.allScore)
         gameStat.gameScore = Int64(gameModel.gameScore)
         gameStat.levelTime = Int64(settingsModel.timeGame)
+        gameStat.gameSpeed = Int64(settingsModel.wordChangeSpeed)
         try? context.save()
     }
 }
@@ -214,7 +216,7 @@ extension GameViewController {
     }
 
     @objc func correctTap(sender: UIButton) {
-        guard settingsModel.checkAnswear else {return}
+        guard settingsModel.checkAnswer else {return}
         gameModel.gameScore += 1
         sender.isEnabled = false
 
@@ -224,7 +226,7 @@ extension GameViewController {
 
     @objc func x2ButtonPress(){
         gameSpeedTimer?.invalidate()
-        gameSpeedTimer = Timer.scheduledTimer(timeInterval: TimeInterval(settingsModel.wordChangeSpeed / 2), target: self, selector: #selector(gameTime), userInfo: nil, repeats: true)
+        gameSpeedTimer = Timer.scheduledTimer(timeInterval: TimeInterval(settingsModel.wordChangeSpeed) / 2, target: self, selector: #selector(gameTime), userInfo: nil, repeats: true)
         x2SpeedButton.isEnabled = false
     }
 
